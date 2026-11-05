@@ -1,0 +1,119 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --band: #f5f5f7;
+  --tile: #ffffff;
+  --feature: #000000;
+  --feature-text: #f5f5f7;
+  --feature-label: #a1a1a6;
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --line: #d2d2d7;
+  --button-bg: #1d1d1f;
+  --button-text: #ffffff;
+  --cell-key: #6e6e73;
+  --cell-value: #f5f5f7;
+  --margin: clamp(20px, 4vw, 48px);
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --band: #1d1d1f;
+    --tile: #2a2a2c;
+    --feature: #2a2a2c;
+    --text: #f5f5f7;
+    --muted: #a1a1a6;
+    --line: #424245;
+    --button-bg: #f5f5f7;
+    --button-text: #1d1d1f;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font:
+    400 17px/1.47 -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    'Inter Variable',
+    system-ui,
+    sans-serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+p,
+dl,
+dd {
+  margin: 0;
+}
+
+.container {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 20;
+  padding: 8px 14px;
+  border-radius: 980px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-size: 13px;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}

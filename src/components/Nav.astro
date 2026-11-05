@@ -1,0 +1,91 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Mark from './Mark.astro';
+
+const profile = (await getEntry('profile', 'main'))!.data;
+const github = profile.links.find((link) => link.label === 'GitHub');
+const hasPublications = (await getCollection('publications')).length > 0;
+const hasProjects = (await getCollection('projects')).length > 0;
+const hasNotes = (await getCollection('notes')).length > 0;
+
+const items = [
+  { label: 'Research', href: '/#research' },
+  ...(hasPublications ? [{ label: 'Publications', href: '/#publications' }] : []),
+  ...(hasProjects ? [{ label: 'Projects', href: '/#projects' }] : []),
+  { label: 'Education', href: '/#education' },
+  { label: 'Contact', href: '/#contact' },
+  ...(hasNotes ? [{ label: 'Notes', href: '/notes/' }] : []),
+  ...(github ? [{ label: github.label, href: github.url }] : []),
+];
+---
+
+<header class="site-header">
+  <nav class="container bar" aria-label="Main">
+    <a class="brand" href="/" aria-label={`${profile.name}, home`}>
+      <Mark />
+      <span>{profile.name}</span>
+    </a>
+    <ul class="links">
+      {items.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+    </ul>
+    <a class="email" href={`mailto:${profile.emails[0].address}`}>Email</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 52px;
+    font-size: 13px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.016em;
+    white-space: nowrap;
+  }
+
+  .links {
+    display: flex;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .email {
+    padding: 5px 14px;
+    border-radius: 980px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    font-size: 12.5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .email:hover {
+    text-decoration: none;
+    opacity: 0.86;
+  }
+
+  @media (max-width: 767px) {
+    .links {
+      display: none;
+    }
+  }
+</style>

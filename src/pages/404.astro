@@ -1,0 +1,32 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const profile = (await getEntry('profile', 'main'))!.data;
+---
+
+<Base title={`Page not found | ${profile.name}`} description="This page does not exist.">
+  <section class="container not-found">
+    <h1>Page not found</h1>
+    <p><a href="/">Go to home</a></p>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    padding-block: clamp(96px, 16vw, 200px);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.028em;
+    font-weight: 600;
+  }
+
+  p {
+    margin-top: 16px;
+    font-weight: 500;
+  }
+</style>

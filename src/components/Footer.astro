@@ -1,0 +1,28 @@
+---
+import { getEntry } from 'astro:content';
+
+const profile = (await getEntry('profile', 'main'))!.data;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container row">
+    <span>Copyright © {year} {profile.name}</span>
+    <span>aston4215.com</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--band);
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 18px;
+  }
+</style>
