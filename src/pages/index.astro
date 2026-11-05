@@ -1,6 +1,8 @@
 ---
 import { getEntry } from 'astro:content';
 import Hero from '../components/Hero.astro';
+import KvGraphic from '../components/KvGraphic.astro';
+import Tile from '../components/Tile.astro';
 import Base from '../layouts/Base.astro';
 
 const profile = (await getEntry('profile', 'main'))!.data;
@@ -8,4 +10,48 @@ const profile = (await getEntry('profile', 'main'))!.data;
 
 <Base title={profile.name} description={profile.lead}>
   <Hero name={profile.name} lead={profile.lead} />
+
+  <section class="band" id="research">
+    <div class="container bento">
+      <Tile label="Research" title={profile.research} emphasis>
+        <KvGraphic />
+      </Tile>
+      <Tile label="Lab" title={profile.lab}>
+        <p class="lab-details">
+          {profile.institution}
+          <span class="muted">{profile.professor}</span>
+          <a class="lab-link" href={profile.labUrl}>Visit lab site ›</a>
+        </p>
+      </Tile>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .band {
+    padding-block: clamp(56px, 7vw, 96px);
+    background: var(--band);
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .lab-details {
+    margin-top: auto;
+    padding-top: 48px;
+  }
+
+  .muted {
+    display: block;
+    color: var(--muted);
+  }
+
+  .lab-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+</style>

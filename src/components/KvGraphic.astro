@@ -1,0 +1,106 @@
+---
+const rows = [
+  [1, 5, 9, 14, 20, 26],
+  [0, 3, 8, 12, 18],
+  [2, 6, 11, 17, 22, 28, 33],
+  [4, 9, 15, 24],
+  [1, 7, 10, 16, 21, 29],
+  [3, 13, 19, 27, 31],
+];
+
+const pairs = rows.flatMap((row, y) => row.map((x, i) => ({ x, y, d: x - i * 2 })));
+---
+
+<div class="graphic" aria-hidden="true">
+  <div class="grid">
+    {pairs.map(({ x, y, d }) => (
+      <span class="kv" style={`--x: ${x}; --y: ${y}; --d: ${d}`}>
+        <span class="cell key"></span>
+        <span class="cell value"></span>
+      </span>
+    ))}
+  </div>
+  <div class="legend">
+    <span class="legend-key">key</span>
+    <span class="legend-value">value</span>
+  </div>
+</div>
+
+<style>
+  .graphic {
+    margin-top: auto;
+    padding-top: clamp(36px, 5vw, 64px);
+  }
+
+  .grid {
+    --column: calc(100% / 36);
+    position: relative;
+    aspect-ratio: 36 / 7.2;
+  }
+
+  .kv {
+    position: absolute;
+    top: calc(var(--y) * 100% / 6);
+    left: calc(var(--x) * var(--column));
+    display: flex;
+    width: calc(2 * var(--column));
+    height: calc(100% / 6);
+    transform: translateX(calc(var(--d) * -50%));
+  }
+
+  .cell {
+    flex: 1;
+    margin: 1.5px;
+    border-radius: 2px;
+  }
+
+  .key {
+    background: var(--cell-key);
+  }
+
+  .value {
+    background: var(--cell-value);
+  }
+
+  .legend {
+    display: flex;
+    gap: 18px;
+    margin-top: 16px;
+    color: var(--feature-label);
+    font: 500 12px var(--mono);
+    letter-spacing: 0;
+  }
+
+  .legend span::before {
+    content: '';
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-right: 6px;
+    border-radius: 2px;
+  }
+
+  .legend-key::before {
+    background: var(--cell-key);
+  }
+
+  .legend-value::before {
+    background: var(--cell-value);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .kv {
+        animation: pack linear both;
+        animation-timeline: view();
+        animation-range: entry 30% cover 55%;
+      }
+
+      @keyframes pack {
+        from {
+          transform: none;
+        }
+      }
+    }
+  }
+</style>
