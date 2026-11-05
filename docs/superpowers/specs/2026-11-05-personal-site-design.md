@@ -309,12 +309,14 @@ src/
 ## 10. 배포
 
 ```text
-로컬 수정 → main에 Push → GitHub Actions
+로컬 수정 → Push → GitHub Actions
   → npm run build (astro check, astro build)
-  → GitHub Pages → https://aston4215.com
+  → npm test
+  → Chromium, Firefox, WebKit 브라우저 점검
+  → main일 때만 같은 빌드를 GitHub Pages에 배포 → https://aston4215.com
 ```
 
-워크플로는 `actions/checkout@v7`, `withastro/action@v6`, `actions/deploy-pages@v5`를 쓰고, `main` Push와 수동 실행으로 시작한다. 권한은 `contents: read`, `pages: write`, `id-token: write`만 준다.
+워크플로는 `actions/checkout`, `actions/setup-node`, `actions/upload-pages-artifact`, `actions/deploy-pages`를 커밋 해시로 고정해 쓰고, 모든 브랜치의 Push와 수동 실행으로 시작한다. 점검이 실패하면 배포하지 않는다. 브라우저는 실행 환경에만 설치하므로 로컬 설치가 필요 없다. 권한은 `contents: read`, `pages: write`, `id-token: write`만 준다.
 
 이미 설정된 항목은 변경하지 않는다.
 
