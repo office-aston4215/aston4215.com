@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readdirSync } from 'node:fs';
 import { test } from 'node:test';
 import { between, readDist } from './helpers.mjs';
 
@@ -31,6 +32,17 @@ test('the theme scripts are the only executable scripts', () => {
   const scripts = [...home.matchAll(/<script(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)];
   assert.equal(scripts.length, 2);
   for (const [script] of scripts) assert.match(script, /theme/);
+});
+
+test('inline scripts ship without comments', () => {
+  const scripts = [...home.matchAll(/<script(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)];
+  for (const [, body] of scripts) assert.ok(!/(^|\s)\/\/|\/\*/.test(body), body);
+});
+
+test('only the Latin font file is deployed', () => {
+  const fonts = readdirSync('dist/_astro').filter((name) => name.endsWith('.woff2'));
+  assert.equal(fonts.length, 1, fonts.join());
+  assert.match(fonts[0], /^inter-latin-opsz-normal\./);
 });
 
 test('logo keeps the supplied geometry', () => {

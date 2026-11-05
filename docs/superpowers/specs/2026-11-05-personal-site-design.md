@@ -64,7 +64,7 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 ## 4. 정보 구조
 
 ```text
-/                  Hero, Research, Research Experience, Education, Honors & Awards,
+/                  Hero, Research, Labs, Education, Honors & Awards,
                    Experience, Leadership & Service, Skills & Interests, Contact
 /404               찾을 수 없는 페이지 안내와 홈 링크
 
@@ -75,7 +75,7 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 /notes/<slug>/     글마다 생성
 ```
 
-홈의 표시 순서는 Hero, Research, Research Experience, Publications, Projects, Education, Honors & Awards, Experience, Leadership & Service, Skills & Interests, Contact다. Publications와 Projects는 항목이 없으면 제목과 메뉴 링크를 모두 표시하지 않는다.
+홈의 표시 순서는 Hero, Research, Labs, Publications, Projects, Education, Honors & Awards, Experience, Leadership & Service, Skills & Interests, Contact다. Publications와 Projects는 항목이 없으면 제목과 메뉴 링크를 모두 표시하지 않는다.
 
 ### 헤더
 
@@ -84,7 +84,7 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 | 위치 | 데스크톱 (900px 이상) | 900px 미만 |
 |---|---|---|
 | 왼쪽 | 로고 20px와 `Aston4215`, 홈 링크 | 같음 |
-| 오른쪽 | Research, Education, Honors, Experience, Contact, GitHub 링크와 Email 버튼 | Email 버튼. 공개 글이 있으면 Notes 링크도 표시 |
+| 오른쪽 | Research, Labs, Education, Honors, Experience, Contact, GitHub 링크와 Email 버튼 | Email 버튼. 공개 글이 있으면 Notes 링크도 표시 |
 
 - 콘텐츠가 추가되면 Publications, Projects, Notes 링크가 해당 순서대로 나타난다.
 - Email 버튼은 `mailto:aston4215@kaist.ac.kr`로 연결한다.
@@ -259,7 +259,7 @@ Astro Content Collections로 형식을 검증한다. 형식이 틀리면 빌드�
 | `CvEntry.astro` | 기관 부제목, 역할, 위치, 기간, 세부 항목 | `title`, `subtitle?`, `location?`, `period`, `details` |
 | `Footer.astro` | 저작권 표기와 도메인 | 없음 |
 
-Publications, Projects, Honors & Awards, Skills & Interests, Contact는 `SpecBlock`과 `SpecRow`를 쓴다. Research Experience, Education, Experience, Leadership & Service는 `SpecBlock`과 `CvEntry`를 쓴다.
+Publications, Projects, Honors & Awards, Skills & Interests는 `SpecBlock`과 `SpecRow`를 쓴다. Labs는 `LabCard`, Contact는 `ContactCard`를 쓴다. Education, Experience, Leadership & Service는 `SpecBlock`과 `CvEntry`를 쓴다.
 
 ## 8. 기술 구조
 

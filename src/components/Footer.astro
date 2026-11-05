@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 
 const profile = (await getEntry('profile', 'main'))!.data;
 const year = new Date().getFullYear();
+// The script below switches instantly in a browser without view transitions, or for a visitor who asked for less motion.
 ---
 
 <footer class="site-footer">
@@ -38,7 +39,6 @@ const year = new Date().getFullYear();
       choice.addEventListener('click', () => {
         const theme = choice.dataset.themeChoice;
         if (theme === root.dataset.theme) return;
-        // A browser without view transitions, or a visitor who asked for less motion, gets an instant switch.
         if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.startViewTransition(() => setTheme(theme));
         } else {

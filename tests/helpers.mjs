@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { cpSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 export const readDist = (path) => readFileSync(join('dist', path), 'utf8');
@@ -39,6 +39,11 @@ let fixtureCount = 0;
 // Builds a temporary copy of src/content, so a failed or killed test cannot leave real content changed.
 // files maps a path inside the content folder to its new text.
 export function buildFixture(files) {
+  for (const name of readdirSync('.').filter((entry) => entry.startsWith('.tmp-content-'))) {
+    try {
+      rmSync(name, { recursive: true, force: true });
+    } catch {}
+  }
   const dir = `.tmp-content-${process.pid}-${fixtureCount++}`;
   cpSync('src/content', dir, { recursive: true });
   for (const [path, text] of Object.entries(files)) writeFileSync(join(dir, path), text);

@@ -1,11 +1,12 @@
 ---
+import type { ComponentProps } from 'astro/types';
 import ContactIcon from './ContactIcon.astro';
 
 interface Props {
   href?: string;
   title: string;
   handle?: string;
-  icon: 'Email' | 'GitHub' | 'Instagram' | 'Google Scholar' | 'LinkedIn';
+  icon: ComponentProps<typeof ContactIcon>['name'];
 }
 
 const { href, title, handle, icon } = Astro.props;

@@ -1,5 +1,4 @@
 ---
-import '@fontsource-variable/inter/opsz.css';
 import '../styles/global.css';
 import { getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
@@ -12,6 +11,7 @@ interface Props {
   description: string;
 }
 
+// The theme script in the head runs before the first paint so a saved dark theme never flashes light.
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
@@ -52,7 +52,6 @@ const person = {
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
     <script is:inline>
-      // Runs before the first paint so a saved dark theme never flashes light.
       (() => {
         let saved;
         try {
