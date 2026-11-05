@@ -1,12 +1,41 @@
 import { defineCollection } from 'astro:content';
-import { file, glob } from 'astro/loaders';
+import { file, glob, type Loader } from 'astro/loaders';
 import { z } from 'astro/zod';
+
+// Tests point this at a temporary copy so they never touch the real content.
+const CONTENT_DIR = process.env.CONTENT_DIR ?? 'src/content';
+
+// file() only logs bad YAML and missing or duplicate ids, then the build succeeds without those entries.
+// Turning those messages into errors stops a broken content edit from being deployed.
+const yamlFile = (path: string): Loader => {
+  const loader = file(path);
+  return {
+    ...loader,
+    load: (context) =>
+      loader.load({
+        ...context,
+        logger: Object.create(context.logger, {
+          error: {
+            value: (message: string) => {
+              throw new Error(`${path}: ${message}`);
+            },
+          },
+          warn: {
+            value: (message: string) => {
+              if (message.includes('same slug')) throw new Error(`${path}: ${message}`);
+              context.logger.warn(message);
+            },
+          },
+        }),
+      }),
+  };
+};
 
 const link = z.object({ label: z.string(), handle: z.string(), url: z.url() }).strict();
 const email = z.object({ label: z.string(), address: z.email() }).strict();
 
 const profile = defineCollection({
-  loader: file('src/content/profile.yaml'),
+  loader: yamlFile(`${CONTENT_DIR}/profile.yaml`),
   schema: z
     .object({
       id: z.string(),
@@ -31,27 +60,25 @@ const timelineEntry = {
 };
 
 const education = defineCollection({
-  loader: file('src/content/education.yaml'),
+  loader: yamlFile(`${CONTENT_DIR}/education.yaml`),
   schema: z.object(timelineEntry).strict(),
 });
 
 const publications = defineCollection({
-  loader: file('src/content/publications.yaml'),
+  loader: yamlFile(`${CONTENT_DIR}/publications.yaml`),
   schema: z
     .object({ ...timelineEntry, authors: z.array(z.string()).min(1), venue: z.string(), url: z.url().optional() })
     .strict(),
 });
 
 const projects = defineCollection({
-  loader: file('src/content/projects.yaml'),
+  loader: yamlFile(`${CONTENT_DIR}/projects.yaml`),
   schema: z.object({ ...timelineEntry, summary: z.string(), url: z.url().optional() }).strict(),
 });
 
 const notes = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/notes' }),
-  schema: z
-    .object({ title: z.string(), date: z.coerce.date(), summary: z.string(), draft: z.boolean().default(false) })
-    .strict(),
+  loader: glob({ pattern: '**/[^_]*.md', base: `${CONTENT_DIR}/notes` }),
+  schema: z.object({ title: z.string(), date: z.date(), summary: z.string(), draft: z.boolean().default(false) }).strict(),
 });
 
 export const collections = { profile, education, publications, projects, notes };

@@ -82,11 +82,11 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 | 위치 | 데스크톱 (768px 이상) | 모바일 |
 |---|---|---|
 | 왼쪽 | 로고 20px와 이름, 홈 링크 | 같음 |
-| 오른쪽 | Research, Education, Contact, GitHub 링크와 Email 버튼 | Email 버튼 |
+| 오른쪽 | Research, Education, Contact, GitHub 링크와 Email 버튼 | Email 버튼. 공개 글이 있으면 Notes 링크도 표시 |
 
 - 콘텐츠가 추가되면 Publications, Projects, Notes 링크가 해당 순서대로 나타난다.
 - Email 버튼은 `mailto:aston4215@kaist.ac.kr`로 연결한다.
-- 모바일에서는 페이지가 한 번의 스크롤로 끝나므로 햄버거 메뉴를 두지 않는다.
+- 모바일에서는 페이지가 한 번의 스크롤로 끝나므로 햄버거 메뉴를 두지 않는다. Notes는 별도 페이지라 항상 표시한다.
 
 ## 5. 디자인 시스템
 

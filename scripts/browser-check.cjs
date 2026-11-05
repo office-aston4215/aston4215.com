@@ -1,4 +1,4 @@
-// Usage: PW_DIR=<folder with playwright installed> [SKIP_BROWSERS=firefox] node scripts/browser-check.cjs <url> <output folder>
+// Usage: PW_DIR=<folder with playwright installed> [SKIP_BROWSERS=firefox] [PAGES=/,/notes/] node scripts/browser-check.cjs <url> <output folder>
 // Playwright stays out of package.json; it is only needed for this check.
 const fs = require('node:fs');
 const path = require('node:path');
@@ -7,6 +7,7 @@ const { chromium, firefox, webkit } = require(path.join(process.env.PW_DIR, 'nod
 const [base, outDir] = process.argv.slice(2);
 const WIDTHS = [320, 390, 768, 1024, 1440, 1920];
 const HEADER = 52;
+const PAGES = (process.env.PAGES ?? '/').split(',');
 const failures = [];
 
 function check(browser, name, ok, detail = '') {
@@ -87,9 +88,22 @@ async function run(label, type, launch = {}) {
     for (const width of WIDTHS) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(base, { waitUntil: 'networkidle' });
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-      check(label, `${scheme} ${width}px has no horizontal overflow`, overflow <= 0, `by ${overflow}px`);
       await page.screenshot({ path: path.join(outDir, `${label}-${scheme}-${width}.png`), fullPage: true });
+      for (const pagePath of PAGES) {
+        await page.goto(new URL(pagePath, base).href, { waitUntil: 'networkidle' });
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        check(label, `${scheme} ${width}px ${pagePath} has no horizontal overflow`, overflow <= 0, `by ${overflow}px`);
+        const overlaps = await page.evaluate(() =>
+          [...document.querySelectorAll('dt')].filter((dt) => {
+            const range = document.createRange();
+            range.selectNodeContents(dt);
+            const text = range.getBoundingClientRect();
+            const value = dt.nextElementSibling.getBoundingClientRect();
+            return text.bottom > value.top + 1 && text.top < value.bottom - 1 && text.right > value.left + 0.5;
+          }).length,
+        );
+        check(label, `${scheme} ${width}px ${pagePath} labels do not overlap values`, overlaps === 0, `${overlaps} rows`);
+      }
     }
     check(label, `${scheme} console and network are clean`, problems.length === 0, problems.join('; '));
     await ctx.close();
@@ -103,6 +117,11 @@ async function run(label, type, launch = {}) {
     return a.right > b.left;
   });
   check(label, '320px name and Email button do not overlap', !overlap);
+  const notesLink = await page.evaluate(() => {
+    const links = [...document.querySelectorAll('nav a[href="/notes/"]')];
+    return links.length === 0 || links.some((a) => a.getBoundingClientRect().width > 0);
+  });
+  check(label, '320px notes link is visible when notes exist', notesLink);
   const lines = await page.evaluate(() => {
     const oneLine = (el) => el.getBoundingClientRect().height < parseFloat(getComputedStyle(el).fontSize) * 1.7;
     return { name: oneLine(document.querySelector('h1')), emails: [...document.querySelectorAll('#contact dd')].every(oneLine) };

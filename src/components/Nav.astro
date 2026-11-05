@@ -9,13 +9,13 @@ const hasPublications = (await getCollection('publications')).length > 0;
 const hasProjects = (await getCollection('projects')).length > 0;
 const hasNotes = (await getCollection('notes')).some(isPublished);
 
-const items = [
+const items: { label: string; href: string; always?: boolean }[] = [
   { label: 'Research', href: '/#research' },
   ...(hasPublications ? [{ label: 'Publications', href: '/#publications' }] : []),
   ...(hasProjects ? [{ label: 'Projects', href: '/#projects' }] : []),
   { label: 'Education', href: '/#education' },
   { label: 'Contact', href: '/#contact' },
-  ...(hasNotes ? [{ label: 'Notes', href: '/notes/' }] : []),
+  ...(hasNotes ? [{ label: 'Notes', href: '/notes/', always: true }] : []),
   ...(github ? [{ label: github.label, href: github.url }] : []),
 ];
 ---
@@ -27,7 +27,7 @@ const items = [
       <span>{profile.name}</span>
     </a>
     <ul class="links">
-      {items.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      {items.map((item) => <li class:list={{ always: item.always }}><a href={item.href}>{item.label}</a></li>)}
     </ul>
     <a class="email" href={`mailto:${profile.emails[0].address}`}>Email</a>
   </nav>
@@ -84,8 +84,15 @@ const items = [
     opacity: 0.86;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 899px) {
+    .bar,
     .links {
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .links li:not(.always) {
       display: none;
     }
   }

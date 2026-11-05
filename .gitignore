@@ -4,3 +4,6 @@ dist/
 .tmp-ext/
 .superpowers/
 *.log
+.tmp-pop/
+.tmp-content-*/
+.tmp-content/
