@@ -37,4 +37,10 @@ const { label } = Astro.props;
       font-size: 15px;
     }
   }
+
+  @media (max-width: 379px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 </style>

@@ -88,11 +88,21 @@ const pairs = rows.flatMap((row, y) => row.map((x, i) => ({ x, y, d: x - i * 2 }
     background: var(--cell-value);
   }
 
+  @media (max-width: 767px) {
+    .cell {
+      margin: 1px;
+      border-radius: 1px;
+    }
+  }
+
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       .kv {
+        /* A custom property stops the CSS minifier merging view() into the
+           animation shorthand, which browsers reject. */
+        --pack-timeline: view();
         animation: pack linear both;
-        animation-timeline: view();
+        animation-timeline: var(--pack-timeline);
         animation-range: entry 30% cover 55%;
       }
 

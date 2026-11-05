@@ -11,6 +11,13 @@ test('research section shows topic, lab, professor and lab link', () => {
   assert.match(section, /href="https:\/\/mlv\.kaist\.ac\.kr\/"[^>]*>\s*Visit lab site ›/);
 });
 
+test('scroll timeline survives CSS minification', () => {
+  // Browsers reject an `animation` shorthand containing view(), which silently disables the motion.
+  assert.ok(!/animation:[^;}]*view\(\)/.test(home), 'view() was merged into the animation shorthand');
+  assert.match(home, /animation-timeline:\s*(view\(\)|var\()/);
+  assert.match(home, /animation-range:\s*entry 30% cover 55%/);
+});
+
 test('graphic has 33 hidden pairs, a legend, and fixed offsets', () => {
   assert.equal([...section.matchAll(/class="kv/g)].length, 33);
   assert.match(section, /aria-hidden="true"/);
