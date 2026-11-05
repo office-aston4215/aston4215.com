@@ -34,6 +34,23 @@ const yamlFile = (path: string): Loader => {
 const link = z.object({ label: z.string(), handle: z.string(), url: z.url() }).strict();
 const email = z.object({ label: z.string(), address: z.email() }).strict();
 
+// period is shown as written. start sorts newest first and is YYYY or YYYY-MM.
+const timeline = {
+  id: z.string(),
+  period: z.string(),
+  start: z.string().regex(/^\d{4}(-\d{2})?$/),
+  title: z.string(),
+};
+
+const cvEntry = z
+  .object({
+    ...timeline,
+    subtitle: z.string().optional(),
+    location: z.string().optional(),
+    details: z.array(z.string()).default([]),
+  })
+  .strict();
+
 const profile = defineCollection({
   loader: yamlFile(`${CONTENT_DIR}/profile.yaml`),
   schema: z
@@ -45,44 +62,38 @@ const profile = defineCollection({
       lab: z.string(),
       labUrl: z.url(),
       institution: z.string(),
-      professor: z.string(),
+      advisor: z.string(),
       emails: z.array(email).min(1),
       links: z.array(link),
     })
     .strict(),
 });
 
-const timelineEntry = {
-  id: z.string(),
-  period: z.string(),
-  start: z.number().int(),
-  title: z.string(),
-};
+const research = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/research.yaml`), schema: cvEntry });
+const education = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/education.yaml`), schema: cvEntry });
+const experience = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/experience.yaml`), schema: cvEntry });
+const leadership = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/leadership.yaml`), schema: cvEntry });
 
-const education = defineCollection({
-  loader: yamlFile(`${CONTENT_DIR}/education.yaml`),
-  schema: z
-    .object({
-      id: z.string(),
-      school: z.string(),
-      location: z.string(),
-      period: z.string(),
-      start: z.number().int(),
-      details: z.array(z.string()).default([]),
-    })
-    .strict(),
+const honors = defineCollection({
+  loader: yamlFile(`${CONTENT_DIR}/honors.yaml`),
+  schema: z.object({ ...timeline, issuer: z.string() }).strict(),
+});
+
+const skills = defineCollection({
+  loader: yamlFile(`${CONTENT_DIR}/skills.yaml`),
+  schema: z.object({ id: z.string(), order: z.number().int(), label: z.string(), value: z.string() }).strict(),
 });
 
 const publications = defineCollection({
   loader: yamlFile(`${CONTENT_DIR}/publications.yaml`),
   schema: z
-    .object({ ...timelineEntry, authors: z.array(z.string()).min(1), venue: z.string(), url: z.url().optional() })
+    .object({ ...timeline, authors: z.array(z.string()).min(1), venue: z.string(), url: z.url().optional() })
     .strict(),
 });
 
 const projects = defineCollection({
   loader: yamlFile(`${CONTENT_DIR}/projects.yaml`),
-  schema: z.object({ ...timelineEntry, summary: z.string(), url: z.url().optional() }).strict(),
+  schema: z.object({ ...timeline, summary: z.string(), url: z.url().optional() }).strict(),
 });
 
 const notes = defineCollection({
@@ -90,4 +101,4 @@ const notes = defineCollection({
   schema: z.object({ title: z.string(), date: z.date(), summary: z.string(), draft: z.boolean().default(false) }).strict(),
 });
 
-export const collections = { profile, education, publications, projects, notes };
+export const collections = { profile, research, education, experience, leadership, honors, skills, publications, projects, notes };

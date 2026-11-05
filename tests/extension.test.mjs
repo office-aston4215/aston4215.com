@@ -7,8 +7,8 @@ let ext = '';
 
 before(() => {
   const r = buildFixture({
-    'publications.yaml': '- id: fixture-paper\n  period: "2028"\n  start: 2028\n  title: Fixture Paper\n  authors: [Tae-Yoon Kim]\n  venue: Fixture Venue\n',
-    'projects.yaml': '- id: fixture-project\n  period: "2028"\n  start: 2028\n  title: Fixture Project\n  summary: Fixture summary\n',
+    'publications.yaml': '- id: fixture-paper\n  period: "2028"\n  start: "2028"\n  title: Fixture Paper\n  authors: [Tae-Yoon Kim]\n  venue: Fixture Venue\n',
+    'projects.yaml': '- id: fixture-project\n  period: "2028"\n  start: "2028"\n  title: Fixture Project\n  summary: Fixture summary\n',
     'notes/fixture-note.md': '---\ntitle: Fixture Note\ndate: 2028-01-02\nsummary: Fixture note summary\n---\n\nFixture note body.\n',
     'notes/fixture-draft.md': '---\ntitle: Fixture Draft\ndate: 2028-01-03\nsummary: Fixture draft summary\ndraft: true\n---\n\nDraft body.\n',
   });

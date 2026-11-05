@@ -7,7 +7,7 @@ const notFound = readDist('404.html');
 
 test('nav lists only existing sections', () => {
   const nav = between(home, '<nav', '</nav>');
-  for (const href of ['/#research', '/#education', '/#contact', 'https://github.com/office-aston4215', 'mailto:aston4215@kaist.ac.kr'])
+  for (const href of ['/#research', '/#education', '/#experience', '/#honors', '/#contact', 'https://github.com/office-aston4215', 'mailto:aston4215@kaist.ac.kr'])
     assert.ok(nav.includes(href), href);
   for (const label of ['Publications', 'Projects', 'Notes'])
     assert.ok(!nav.includes(label), label);

@@ -14,6 +14,8 @@ const items: { label: string; href: string; always?: boolean }[] = [
   ...(hasPublications ? [{ label: 'Publications', href: '/#publications' }] : []),
   ...(hasProjects ? [{ label: 'Projects', href: '/#projects' }] : []),
   { label: 'Education', href: '/#education' },
+  { label: 'Honors', href: '/#honors' },
+  { label: 'Experience', href: '/#experience' },
   { label: 'Contact', href: '/#contact' },
   ...(hasNotes ? [{ label: 'Notes', href: '/notes/', always: true }] : []),
   ...(github ? [{ label: github.label, href: github.url }] : []),
@@ -84,14 +86,14 @@ const items: { label: string; href: string; always?: boolean }[] = [
     opacity: 0.86;
   }
 
-  @media (max-width: 899px) {
+  @media (max-width: 1099px) {
     .bar,
     .links {
-      gap: 18px;
+      gap: 14px;
     }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 899px) {
     .links li:not(.always) {
       display: none;
     }

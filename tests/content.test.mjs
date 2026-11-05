@@ -8,7 +8,7 @@ const education = readFileSync('src/content/education.yaml', 'utf8');
 after(() => rmSync(FIXTURE_OUT, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }));
 
 test('invalid content fails the build and names the field', () => {
-  const r = buildFixture({ 'education.yaml': `${education}- id: broken\n  school: Broken\n  location: Nowhere\n  period: "2020"\n  start: "not a number"\n` });
+  const r = buildFixture({ 'education.yaml': `${education}- id: broken\n  title: Broken\n  period: "2020"\n  start: "not a date"\n` });
   assert.notEqual(r.status, 0);
   assert.match(r.output, /start/);
 });
@@ -24,13 +24,13 @@ test('YAML syntax errors fail the build', () => {
 });
 
 test('entries without an id fail the build', () => {
-  const r = buildFixture({ 'education.yaml': '- school: Missing id\n  location: Nowhere\n  period: "2020"\n  start: 2020\n' });
+  const r = buildFixture({ 'education.yaml': '- title: Missing id\n  period: "2020"\n  start: "2020"\n' });
   assert.notEqual(r.status, 0, 'missing id passed the build');
   assert.match(r.output, /missing an id/);
 });
 
 test('duplicate ids fail the build', () => {
-  const entry = (title) => `- id: same\n  school: ${title}\n  location: Nowhere\n  period: "2020"\n  start: 2020\n`;
+  const entry = (title) => `- id: same\n  title: ${title}\n  period: "2020"\n  start: "2020"\n`;
   const r = buildFixture({ 'education.yaml': entry('First') + entry('Second') });
   assert.notEqual(r.status, 0, 'duplicate id passed the build');
   assert.match(r.output, /same slug/);

@@ -1,0 +1,16 @@
+- id: gifted-tutor
+  title: Global Institute For Talented EDucation
+  subtitle: JuniorKAIST Teaching Tutor
+  location: Daejeon, Korea
+  period: March 2026 – Present
+  start: "2026-03"
+  details:
+    - Led classroom sessions on introductory C programming and reviewed students' assignments.
+- id: cs10001-ta
+  title: KAIST CS.10001 Introduction to Programming
+  subtitle: Undergraduate Teaching Assistant
+  location: Daejeon, Korea
+  period: February 2026 – Present
+  start: "2026-02"
+  details:
+    - Supported Python instruction for first-year students through teaching materials and Q&A.

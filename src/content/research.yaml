@@ -1,0 +1,19 @@
+- id: machine-learning-and-vision-lab
+  title: KAIST Machine Learning and Vision Lab, Individual Study (CS.91100)
+  subtitle: "Undergraduate Research Student, Advisor: Prof. Hyunwoo J. Kim"
+  location: Daejeon, Korea
+  period: September 2026 – Present
+  start: "2026-09"
+  details:
+    - Studied frontier LLM architectures (Kimi K3, GLM-5.3-Flash) and FlashAttention versions 1 through 4, focusing on KV cache design, sparse attention, and Mixture-of-Experts routing.
+    - Proposed a combined KV cache and sparse indexer component, then disproved its feasibility through case-by-case analysis and small-scale experiments.
+    - Developing Gramian SVD Checkpoint Compaction, a low-rank state compression method for prefix caching in linear attention models, with GPU experiments toward a paper submission.
+- id: urban-robotics-lab
+  title: KAIST Urban Robotics Lab, Individual Study (EE.91100)
+  subtitle: "Undergraduate Research Student, Advisor: Prof. Hyun Myung"
+  location: Daejeon, Korea
+  period: June 2026 – August 2026
+  start: "2026-06"
+  details:
+    - Ran LiDAR SLAM (GMapping, Hector) and navigation on a simulated TurtleBot3 in Gazebo, building ROS nodes in Docker and visualizing LiDAR, IMU, and RGB-D streams in RViz.
+    - Benchmarked seven keypoint pipelines from ORB and SIFT to the learned SuperPoint on inlier ratio and runtime, finding DAISY most accurate (29.5% inlier ratio).

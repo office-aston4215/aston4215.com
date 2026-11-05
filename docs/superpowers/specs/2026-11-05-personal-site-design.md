@@ -26,10 +26,8 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 | 소개 문장 | Undergraduate at KAIST, researching KV cache compaction in the Machine Learning & Vision Lab. |
 | 연구 | KV cache compaction |
 | 연구실 | Machine Learning & Vision Lab, KAIST (`https://mlv.kaist.ac.kr/`) |
-| 연구실 교수 | Prof. Hyunwoo J. Kim |
-| 학력 | University of California, Berkeley / Berkeley, California, USA / Spring 2027 / Exchange Program |
-| 학력 | Korea Advanced Institute of Science and Technology (KAIST) / Daejeon, South Korea / 2025–present / Undergraduate, School of Computing / Research on KV cache compaction in Prof. Hyunwoo J. Kim's Machine Learning & Vision Lab |
-| 학력 | Seongdeok High School / Gwangju, South Korea / 2022–2024 |
+| 지도교수 | Prof. Hyunwoo J. Kim |
+| 연구 경력, 학력, 수상, 경력, 리더십, 기술 | 사용자의 CV 두 건에서 가져온 `src/content/*.yaml` 내용. Word 파일을 기준으로 하고 PDF에만 있는 항목을 더한다 |
 | 이메일 | Academic: `aston4215@kaist.ac.kr` |
 | 이메일 | General: `office.aston4215@gmail.com` |
 | GitHub | `office-aston4215` (`https://github.com/office-aston4215`) |
@@ -41,7 +39,8 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 
 - `aston4215`는 주소와 계정 이름으로만 쓰고, 브랜드 문구로 쓰지 않는다.
 - KV cache compaction의 정의나 성과 설명은 제공되기 전까지 쓰지 않는다.
-- 논문, 수상, 프로젝트는 현재 없거나 비공개이므로 표시하지 않는다.
+- 논문과 프로젝트는 현재 없거나 비공개이므로 표시하지 않는다.
+- CV의 전화번호와 우편 주소는 공개 연락처 범위 밖이므로 표시하지 않는다. CV 원본 파일도 저장소에 넣지 않는다.
 - Google Scholar와 LinkedIn 링크는 넣지 않는다.
 
 ## 3. 범위
@@ -63,7 +62,8 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 ## 4. 정보 구조
 
 ```text
-/                  Hero, Research, Education, Contact
+/                  Hero, Research, Research Experience, Education, Honors & Awards,
+                   Experience, Leadership & Service, Skills & Interests, Contact
 /404               찾을 수 없는 페이지 안내와 홈 링크
 
 콘텐츠를 추가하면 자동으로 나타나는 영역
@@ -73,16 +73,16 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 /notes/<slug>/     글마다 생성
 ```
 
-홈의 표시 순서는 Hero, Research, Publications, Projects, Education, Contact다. 항목이 없는 영역은 제목과 메뉴 링크를 모두 표시하지 않는다.
+홈의 표시 순서는 Hero, Research, Research Experience, Publications, Projects, Education, Honors & Awards, Experience, Leadership & Service, Skills & Interests, Contact다. Publications와 Projects는 항목이 없으면 제목과 메뉴 링크를 모두 표시하지 않는다.
 
 ### 헤더
 
 높이 52px의 상단 고정 헤더이며, 아래쪽에 1px 구분선을 둔다.
 
-| 위치 | 데스크톱 (768px 이상) | 모바일 |
+| 위치 | 데스크톱 (900px 이상) | 900px 미만 |
 |---|---|---|
 | 왼쪽 | 로고 20px와 이름, 홈 링크 | 같음 |
-| 오른쪽 | Research, Education, Contact, GitHub 링크와 Email 버튼 | Email 버튼. 공개 글이 있으면 Notes 링크도 표시 |
+| 오른쪽 | Research, Education, Honors, Experience, Contact, GitHub 링크와 Email 버튼 | Email 버튼. 공개 글이 있으면 Notes 링크도 표시 |
 
 - 콘텐츠가 추가되면 Publications, Projects, Notes 링크가 해당 순서대로 나타난다.
 - Email 버튼은 `mailto:aston4215@kaist.ac.kr`로 연결한다.
@@ -160,14 +160,14 @@ Apple 기기에서는 시스템 서체인 SF로 표시한다. 그 외 기기를 
                                           [KAIST, 교수, 사이트  ]
 =================================================================
  ----------------------------------------------------------------
- Education          University of California, Berkeley    Spring 2027
-                    Berkeley, California, USA
-                    Exchange Program
-
-                    Korea Advanced Institute of ...      2025–present
-                    Daejeon, South Korea
-                    Undergraduate, School of Computing
-                    Research on KV cache compaction ...
+ Research Experience, Education, Experience, Leadership & Service
+                    기관 이름                            기간
+                    역할
+                    위치
+                    - 세부 항목
+ ----------------------------------------------------------------
+ Honors & Awards    기간            수상 이름, 수여 기관
+ Skills & Interests 분류            내용
  ----------------------------------------------------------------
  Contact            Academic        aston4215@kaist.ac.kr
                     General         office.aston4215@gmail.com
@@ -229,13 +229,15 @@ Astro Content Collections로 형식을 검증한다. 형식이 틀리면 빌드�
 
 | 컬렉션 | 파일 | 필드 |
 |---|---|---|
-| `profile` | `src/content/profile.yaml` | `id`, `name`, `lead`, `research`, `lab`, `labUrl`, `institution`, `professor`, `emails[]` (`label`, `address`), `links[]` (`label`, `handle`, `url`) |
-| `education` | `src/content/education.yaml` | `id`, `school`, `location`, `period`, `start`, `details[]` (기본값 빈 목록) |
+| `profile` | `src/content/profile.yaml` | `id`, `name`, `lead`, `research`, `lab`, `labUrl`, `institution`, `advisor`, `emails[]` (`label`, `address`), `links[]` (`label`, `handle`, `url`) |
+| `research`, `education`, `experience`, `leadership` | `src/content/<이름>.yaml` | `id`, `title`, `subtitle?`, `location?`, `period`, `start`, `details[]` (기본값 빈 목록) |
+| `honors` | `src/content/honors.yaml` | `id`, `title`, `issuer`, `period`, `start` |
+| `skills` | `src/content/skills.yaml` | `id`, `order`, `label`, `value` |
 | `publications` | `src/content/publications.yaml` | `id`, `period`, `start`, `title`, `authors[]`, `venue`, `url?` |
 | `projects` | `src/content/projects.yaml` | `id`, `period`, `start`, `title`, `summary`, `url?` |
 | `notes` | `src/content/notes/*.md` | `title`, `date`, `summary`, `draft` (기본값 `false`) |
 
-- `period`는 화면에 그대로 표시하는 문자열이고, `start`는 최신순 정렬에 쓰는 연도 숫자다.
+- `period`는 화면에 그대로 표시하는 문자열이고, `start`는 최신순 정렬에 쓰는 `YYYY` 또는 `YYYY-MM` 문자열이다.
 - 첫 버전의 `publications.yaml`과 `projects.yaml`은 빈 목록이고 `notes/`에는 글이 없다.
 - `draft: true`인 글은 페이지, sitemap, 메뉴 어디에도 나타나지 않는다.
 
@@ -251,10 +253,10 @@ Astro Content Collections로 형식을 검증한다. 형식이 틀리면 빌드�
 | `KvGraphic.astro` | 셀 그래픽과 범례 | 없음 |
 | `SpecBlock.astro` | 사양표 제목과 행 묶음 | `id`, `title` |
 | `SpecRow.astro` | 왼쪽 메타데이터와 오른쪽 값 한 행 | `label`, slot |
-| `EducationEntry.astro` | 학교 부제목, 위치, 기간, 세부 항목 | `school`, `location`, `period`, `details` |
+| `CvEntry.astro` | 기관 부제목, 역할, 위치, 기간, 세부 항목 | `title`, `subtitle?`, `location?`, `period`, `details` |
 | `Footer.astro` | 저작권 표기와 도메인 | 없음 |
 
-Publications, Projects, Contact는 `SpecBlock`과 `SpecRow`를 재사용한다. Education은 학교를 부제목으로 쓰기 위해 `SpecBlock`과 `EducationEntry`를 쓴다.
+Publications, Projects, Honors & Awards, Skills & Interests, Contact는 `SpecBlock`과 `SpecRow`를 쓴다. Research Experience, Education, Experience, Leadership & Service는 `SpecBlock`과 `CvEntry`를 쓴다.
 
 ## 8. 기술 구조
 
@@ -359,7 +361,8 @@ Actions 배포에서는 GitHub가 `CNAME` 파일을 쓰지 않으므로 `public/
 | 논문 | `src/content/publications.yaml`에 항목 추가 |
 | 프로젝트 | `src/content/projects.yaml`에 항목 추가 |
 | 글 | `src/content/notes/<slug>.md` 추가 |
-| 학력 | `src/content/education.yaml`에 항목을 추가하거나 `details`에 줄 추가 |
+| 연구 경력, 학력, 경력, 리더십 | 해당 YAML에 항목을 추가하거나 `details`에 줄 추가 |
+| 수상, 기술 | `src/content/honors.yaml`, `src/content/skills.yaml`에 항목 추가 |
 | 소개, 연락처 | `src/content/profile.yaml` 수정 |
 
 저장한 뒤 `main`에 Push하면 자동으로 배포된다.

@@ -1,26 +1,28 @@
 ---
 interface Props {
-  school: string;
-  location: string;
+  title: string;
+  subtitle?: string;
+  location?: string;
   period: string;
   details: string[];
 }
 
-const { school, location, period, details } = Astro.props;
+const { title, subtitle, location, period, details } = Astro.props;
+const meta = [subtitle, location].filter(Boolean);
 ---
 
 <article class="entry">
   <div class="heading">
-    <h3>{school}</h3>
+    <h3>{title}</h3>
     <span class="period">{period}</span>
   </div>
-  <p class="location">{location}</p>
+  {meta.map((line) => <p class="meta">{line}</p>)}
   {details.length > 0 && <ul>{details.map((detail) => <li>{detail}</li>)}</ul>}
 </article>
 
 <style>
   .entry + .entry {
-    margin-top: 28px;
+    margin-top: 32px;
   }
 
   .heading {
@@ -31,6 +33,7 @@ const { school, location, period, details } = Astro.props;
   }
 
   h3 {
+    min-width: 0;
     margin: 0;
     font-size: 19px;
     line-height: 1.25;
@@ -39,21 +42,24 @@ const { school, location, period, details } = Astro.props;
   }
 
   .period {
+    flex-shrink: 0;
     color: var(--muted);
     font: 400 14px/1.75 var(--mono);
     letter-spacing: 0;
-    white-space: nowrap;
   }
 
-  .location {
+  .meta {
     margin-top: 2px;
     color: var(--muted);
   }
 
   ul {
-    margin: 8px 0 0;
-    padding: 0;
-    list-style: none;
+    margin: 10px 0 0;
+    padding-left: 1.1em;
+  }
+
+  li + li {
+    margin-top: 6px;
   }
 
   @media (max-width: 767px) {

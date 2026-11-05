@@ -1,0 +1,25 @@
+- id: freshman-oblige
+  title: Freshman Oblige Project Dean's Award
+  issuer: KAIST
+  period: March 2026
+  start: "2026-03"
+- id: color-your-2025
+  title: Color Your 2025 Project Dean's Award
+  issuer: KAIST
+  period: December 2025
+  start: "2025-12"
+- id: deans-list
+  title: School of Freshman Dean's List
+  issuer: KAIST
+  period: Fall 2025
+  start: "2025-09"
+- id: highest-honor
+  title: Highest Honor for Academic Excellence
+  issuer: Gwangju Seongdeok High School
+  period: January 2025
+  start: "2025-01"
+- id: meritorious-service
+  title: Meritorious Service Award
+  issuer: Gwangju Seongdeok High School
+  period: January 2025
+  start: "2025-01"

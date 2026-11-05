@@ -1,6 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
-import EducationEntry from '../components/EducationEntry.astro';
+import CvEntry from '../components/CvEntry.astro';
 import Hero from '../components/Hero.astro';
 import KvGraphic from '../components/KvGraphic.astro';
 import SpecBlock from '../components/SpecBlock.astro';
@@ -10,10 +10,15 @@ import Base from '../layouts/Base.astro';
 
 const profile = (await getEntry('profile', 'main'))!.data;
 
-const newestFirst = (a: { data: { start: number } }, b: { data: { start: number } }) => b.data.start - a.data.start;
-const education = (await getCollection('education')).sort(newestFirst);
+const newestFirst = (a: { data: { start: string } }, b: { data: { start: string } }) => b.data.start.localeCompare(a.data.start);
+const research = (await getCollection('research')).sort(newestFirst);
 const publications = (await getCollection('publications')).sort(newestFirst);
 const projects = (await getCollection('projects')).sort(newestFirst);
+const education = (await getCollection('education')).sort(newestFirst);
+const honors = (await getCollection('honors')).sort(newestFirst);
+const experience = (await getCollection('experience')).sort(newestFirst);
+const leadership = (await getCollection('leadership')).sort(newestFirst);
+const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Base title={profile.name} description={profile.lead}>
@@ -27,7 +32,7 @@ const projects = (await getCollection('projects')).sort(newestFirst);
       <Tile label="Lab" title={profile.lab}>
         <p class="lab-details">
           {profile.institution}
-          <span class="muted">{profile.professor}</span>
+          <span class="muted">{`Advisor: ${profile.advisor}`}</span>
           <a class="lab-link" href={profile.labUrl}>Visit lab site ›</a>
         </p>
       </Tile>
@@ -35,6 +40,9 @@ const projects = (await getCollection('projects')).sort(newestFirst);
   </section>
 
   <div class="container specs">
+    <SpecBlock id="research-experience" title="Research Experience" as="div">
+      {research.map(({ data }) => <CvEntry {...data} />)}
+    </SpecBlock>
     {
       publications.length > 0 && (
         <SpecBlock id="publications" title="Publications">
@@ -61,11 +69,26 @@ const projects = (await getCollection('projects')).sort(newestFirst);
       )
     }
     <SpecBlock id="education" title="Education" as="div">
+      {education.map(({ data }) => <CvEntry {...data} />)}
+    </SpecBlock>
+    <SpecBlock id="honors" title="Honors & Awards">
       {
-        education.map(({ data }) => (
-          <EducationEntry school={data.school} location={data.location} period={data.period} details={data.details} />
+        honors.map(({ data }) => (
+          <SpecRow label={data.period}>
+            {data.title}
+            <span class="muted">{data.issuer}</span>
+          </SpecRow>
         ))
       }
+    </SpecBlock>
+    <SpecBlock id="experience" title="Experience" as="div">
+      {experience.map(({ data }) => <CvEntry {...data} />)}
+    </SpecBlock>
+    <SpecBlock id="leadership" title="Leadership & Service" as="div">
+      {leadership.map(({ data }) => <CvEntry {...data} />)}
+    </SpecBlock>
+    <SpecBlock id="skills" title="Skills & Interests">
+      {skills.map(({ data }) => <SpecRow label={data.label}>{data.value}</SpecRow>)}
     </SpecBlock>
     <SpecBlock id="contact" title="Contact">
       {

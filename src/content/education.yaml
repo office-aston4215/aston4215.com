@@ -1,20 +1,28 @@
 - id: uc-berkeley
-  school: University of California, Berkeley
-  location: Berkeley, California, USA
-  period: Spring 2027
-  start: 2027
-  details:
-    - Exchange Program
+  title: University of California, Berkeley
+  subtitle: Exchange Student, UCEAP Reciprocity Program
+  location: Berkeley, CA, USA
+  period: January 2027 – May 2027
+  start: "2027-01"
 - id: kaist
-  school: Korea Advanced Institute of Science and Technology (KAIST)
-  location: Daejeon, South Korea
-  period: 2025–present
-  start: 2025
+  title: Korea Advanced Institute of Science and Technology (KAIST)
+  subtitle: Undergraduate Program, School of Computing
+  location: Daejeon, Korea
+  period: 2025 – Present
+  start: "2025"
   details:
-    - Undergraduate, School of Computing
-    - Research on KV cache compaction in Prof. Hyunwoo J. Kim's Machine Learning & Vision Lab
+    - "GPA: 4.11 / 4.3"
+    - "Expected graduation: February 2029"
+    - "Coursework: Machine Learning, Introduction to Artificial Intelligence, Computer Organization, System Programming, Data Structure, Discrete Mathematics"
+- id: saint-francis
+  title: Saint Francis Catholic Secondary School
+  subtitle: Study abroad coursework in General Studies
+  location: Ontario, Canada
+  period: January 2023
+  start: "2023-01"
 - id: seongdeok
-  school: Seongdeok High School
-  location: Gwangju, South Korea
-  period: 2022–2024
-  start: 2022
+  title: Gwangju Seongdeok High School
+  subtitle: High School Diploma
+  location: Gwangju, Korea
+  period: 2022 – January 2025
+  start: "2022"
