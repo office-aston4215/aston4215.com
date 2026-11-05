@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { readDist, sectionById } from './helpers.mjs';
 
@@ -12,10 +13,16 @@ test('research section shows topic, lab, professor and lab link', () => {
 });
 
 test('scroll timeline survives CSS minification', () => {
+  // The build inlines small stylesheets and writes larger ones to files, so check both.
+  const css = readdirSync('dist/_astro')
+    .filter((name) => name.endsWith('.css'))
+    .map((name) => readFileSync(`dist/_astro/${name}`, 'utf8'))
+    .join('');
+  const styles = home + css;
   // Browsers reject an `animation` shorthand containing view(), which silently disables the motion.
-  assert.ok(!/animation:[^;}]*view\(\)/.test(home), 'view() was merged into the animation shorthand');
-  assert.match(home, /animation-timeline:\s*(view\(\)|var\()/);
-  assert.match(home, /animation-range:\s*entry 30% cover 55%/);
+  assert.ok(!/animation:[^;}]*view\(\)/.test(styles), 'view() was merged into the animation shorthand');
+  assert.match(styles, /animation-timeline:\s*(view\(\)|var\()/);
+  assert.match(styles, /animation-range:\s*entry 30% cover 55%/);
 });
 
 test('graphic has 33 hidden pairs, a legend, and fixed offsets', () => {

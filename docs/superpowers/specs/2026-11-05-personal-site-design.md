@@ -23,7 +23,8 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 | 항목 | 표시 내용 |
 |---|---|
 | 이름 | Tae-Yoon Kim |
-| 소개 문장 | Undergraduate at KAIST, researching KV cache compaction in the Machine Learning & Vision Lab. |
+| 헤더 표기 | Aston4215 (로고 옆) |
+| 소개 문장 | 1행: Korea Advanced Institute of Science and Technology Undergraduate / 2행: AI & Software Researcher |
 | 연구 | KV cache compaction |
 | 연구실 | Machine Learning & Vision Lab, KAIST (`https://mlv.kaist.ac.kr/`) |
 | 지도교수 | Prof. Hyunwoo J. Kim |
@@ -37,7 +38,7 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 
 표시 규칙은 다음과 같다.
 
-- `aston4215`는 주소와 계정 이름으로만 쓰고, 브랜드 문구로 쓰지 않는다.
+- `Aston4215`는 헤더 표기에 쓰고, 이름 제목과 저작권 표기에는 `Tae-Yoon Kim`을 쓴다.
 - KV cache compaction의 정의나 성과 설명은 제공되기 전까지 쓰지 않는다.
 - 논문과 프로젝트는 현재 없거나 비공개이므로 표시하지 않는다.
 - CV의 전화번호와 우편 주소는 공개 연락처 범위 밖이므로 표시하지 않는다. CV 원본 파일도 저장소에 넣지 않는다.
@@ -81,7 +82,7 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 
 | 위치 | 데스크톱 (900px 이상) | 900px 미만 |
 |---|---|---|
-| 왼쪽 | 로고 20px와 이름, 홈 링크 | 같음 |
+| 왼쪽 | 로고 20px와 `Aston4215`, 홈 링크 | 같음 |
 | 오른쪽 | Research, Education, Honors, Experience, Contact, GitHub 링크와 Email 버튼 | Email 버튼. 공개 글이 있으면 Notes 링크도 표시 |
 
 - 콘텐츠가 추가되면 Publications, Projects, Notes 링크가 해당 순서대로 나타난다.
@@ -136,7 +137,7 @@ Apple 기기에서는 시스템 서체인 SF로 표시한다. 그 외 기기를 
 | 메타데이터 | 12~14px | 400~500, 고정폭 | 0, 1.3~1.75 |
 | 푸터 | 12px | 400 | 본문과 같음 |
 
-"KV cache compaction"과 "Vision Lab"은 줄바꿈되지 않게 공백을 묶는다.
+소개 문장은 지정한 두 줄로 나누어 표시하고, 좁은 화면에서는 각 줄이 자연스럽게 줄바꿈된다. 페이지 설명 메타데이터는 두 줄을 쉼표로 잇는다.
 
 ### 격자
 
@@ -151,7 +152,8 @@ Apple 기기에서는 시스템 서체인 SF로 표시한다. 그 외 기기를 
 [로고 이름]             Research Education Contact GitHub (Email)
 -----------------------------------------------------------------
                        Tae-Yoon Kim
-                 Undergraduate at KAIST, ...
+        Korea Advanced Institute of Science and Technology Undergraduate
+                    AI & Software Researcher
                          [사진]
 =================================================================  띠 배경
  [Research                              ] [Lab                  ]
@@ -229,7 +231,7 @@ Astro Content Collections로 형식을 검증한다. 형식이 틀리면 빌드�
 
 | 컬렉션 | 파일 | 필드 |
 |---|---|---|
-| `profile` | `src/content/profile.yaml` | `id`, `name`, `lead`, `research`, `lab`, `labUrl`, `institution`, `advisor`, `emails[]` (`label`, `address`), `links[]` (`label`, `handle`, `url`) |
+| `profile` | `src/content/profile.yaml` | `id`, `name`, `headerLabel`, `lead[]`, `research`, `lab`, `labUrl`, `institution`, `advisor`, `emails[]` (`label`, `address`), `links[]` (`label`, `handle`, `url`) |
 | `research`, `education`, `experience`, `leadership` | `src/content/<이름>.yaml` | `id`, `title`, `subtitle?`, `location?`, `period`, `start`, `details[]` (기본값 빈 목록) |
 | `honors` | `src/content/honors.yaml` | `id`, `title`, `issuer`, `period`, `start` |
 | `skills` | `src/content/skills.yaml` | `id`, `order`, `label`, `value` |

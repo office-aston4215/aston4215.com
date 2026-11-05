@@ -1,6 +1,9 @@
 - id: main
   name: Tae-Yoon Kim
-  lead: Undergraduate at KAIST, researching KV cache compaction in the Machine Learning & Vision Lab.
+  headerLabel: Aston4215
+  lead:
+    - Korea Advanced Institute of Science and Technology Undergraduate
+    - AI & Software Researcher
   research: KV cache compaction
   lab: Machine Learning & Vision Lab
   labUrl: https://mlv.kaist.ac.kr/

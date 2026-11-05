@@ -7,7 +7,7 @@ const home = readDist('index.html');
 
 test('metadata', () => {
   assert.match(home, /<title>Tae-Yoon Kim<\/title>/);
-  assert.match(home, /name="description" content="Undergraduate at KAIST/);
+  assert.match(home, /name="description" content="Korea Advanced Institute of Science and Technology Undergraduate, AI &(amp;)? Software Researcher"/);
   assert.match(home, /<link rel="canonical" href="https:\/\/aston4215\.com\/"/);
   assert.match(home, /property="og:image" content="https:\/\/aston4215\.com\/og\.png"/);
   assert.match(home, /property="og:title" content="Tae-Yoon Kim"/);

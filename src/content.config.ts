@@ -57,7 +57,8 @@ const profile = defineCollection({
     .object({
       id: z.string(),
       name: z.string(),
-      lead: z.string(),
+      headerLabel: z.string(),
+      lead: z.array(z.string()).min(1),
       research: z.string(),
       lab: z.string(),
       labUrl: z.url(),

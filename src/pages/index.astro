@@ -21,7 +21,7 @@ const leadership = (await getCollection('leadership')).sort(newestFirst);
 const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Base title={profile.name} description={profile.lead}>
+<Base title={profile.name} description={profile.lead.join(', ')}>
   <Hero name={profile.name} lead={profile.lead} />
 
   <section class="band" id="research">

@@ -13,6 +13,13 @@ test('nav lists only existing sections', () => {
     assert.ok(!nav.includes(label), label);
 });
 
+test('header shows Aston4215 next to the logo', () => {
+  const brand = between(home, '<a class="brand"', '</a>');
+  assert.match(brand, /aria-label="Aston4215, home"/);
+  assert.match(brand, />Aston4215</);
+  assert.ok(!brand.includes('Tae-Yoon Kim'));
+});
+
 test('skip link targets main', () => {
   assert.match(home, /href="#main"/);
   assert.match(home, /<main[^>]*id="main"/);

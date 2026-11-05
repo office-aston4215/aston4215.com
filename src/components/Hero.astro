@@ -4,19 +4,17 @@ import portrait from '../assets/portrait.jpg';
 
 interface Props {
   name: string;
-  lead: string;
+  lead: string[];
 }
 
 const { name, lead } = Astro.props;
-const NBSP = ' ';
-const leadText = lead
-  .replace('KV cache compaction', `KV${NBSP}cache${NBSP}compaction`)
-  .replace('Vision Lab', `Vision${NBSP}Lab`);
 ---
 
 <section class="container hero">
   <h1>{name}</h1>
-  <p class="lead">{leadText}</p>
+  <p class="lead">
+    {lead.map((line) => <span>{line}</span>)}
+  </p>
   <Picture
     class="portrait"
     src={portrait}
@@ -44,7 +42,6 @@ const leadText = lead
   }
 
   .lead {
-    max-width: 28em;
     margin: 14px auto 0;
     color: var(--muted);
     font-size: clamp(21px, 2.3vw, 28px);
@@ -52,6 +49,10 @@ const leadText = lead
     letter-spacing: -0.018em;
     font-weight: 500;
     text-wrap: balance;
+  }
+
+  .lead span {
+    display: block;
   }
 
   .hero :global(.portrait) {

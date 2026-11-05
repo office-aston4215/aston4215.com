@@ -24,9 +24,9 @@ const items: { label: string; href: string; always?: boolean }[] = [
 
 <header class="site-header">
   <nav class="container bar" aria-label="Main">
-    <a class="brand" href="/" aria-label={`${profile.name}, home`}>
+    <a class="brand" href="/" aria-label={`${profile.headerLabel}, home`}>
       <Mark />
-      <span>{profile.name}</span>
+      <span>{profile.headerLabel}</span>
     </a>
     <ul class="links">
       {items.map((item) => <li class:list={{ always: item.always }}><a href={item.href}>{item.label}</a></li>)}
