@@ -1,10 +1,11 @@
 ---
 import { getEntry } from 'astro:content';
+import Hero from '../components/Hero.astro';
 import Base from '../layouts/Base.astro';
 
 const profile = (await getEntry('profile', 'main'))!.data;
 ---
 
 <Base title={profile.name} description={profile.lead}>
-  <h1>{profile.name}</h1>
+  <Hero name={profile.name} lead={profile.lead} />
 </Base>

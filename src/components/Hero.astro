@@ -1,0 +1,70 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../assets/portrait.jpg';
+
+interface Props {
+  name: string;
+  lead: string;
+}
+
+const { name, lead } = Astro.props;
+const NBSP = ' ';
+const leadText = lead
+  .replace('KV cache compaction', `KV${NBSP}cache${NBSP}compaction`)
+  .replace('Vision Lab', `Vision${NBSP}Lab`);
+---
+
+<section class="container hero">
+  <h1>{name}</h1>
+  <p class="lead">{leadText}</p>
+  <Picture
+    class="portrait"
+    src={portrait}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    widths={[340, 680, 1020]}
+    sizes="min(340px, 64vw)"
+    alt={`Portrait of ${name}`}
+    loading="eager"
+    fetchpriority="high"
+  />
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(48px, 6vw, 72px);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(52px, 8.6vw, 112px);
+    line-height: 1.02;
+    letter-spacing: -0.032em;
+    font-weight: 600;
+  }
+
+  .lead {
+    max-width: 28em;
+    margin: 14px auto 0;
+    color: var(--muted);
+    font-size: clamp(21px, 2.3vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  .hero :global(.portrait) {
+    display: block;
+    width: min(340px, 64vw);
+    height: auto;
+    margin: clamp(28px, 3vw, 40px) auto 0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .hero :global(.portrait) {
+      border-radius: 28px 28px 0 0;
+      filter: brightness(0.92);
+    }
+  }
+</style>
