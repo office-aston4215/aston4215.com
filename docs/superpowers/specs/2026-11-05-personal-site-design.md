@@ -27,9 +27,9 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 | 연구 | KV cache compaction |
 | 연구실 | Machine Learning & Vision Lab, KAIST (`https://mlv.kaist.ac.kr/`) |
 | 연구실 교수 | Prof. Hyunwoo J. Kim |
-| 학력 | Spring 2027: UC Berkeley, Exchange Program |
-| 학력 | 2025–present: KAIST, School of Computing |
-| 학력 | 2022–2024: Seongdeok High School, Gwangju |
+| 학력 | University of California, Berkeley / Berkeley, California, USA / Spring 2027 / Exchange Program |
+| 학력 | Korea Advanced Institute of Science and Technology (KAIST) / Daejeon, South Korea / 2025–present / Undergraduate, School of Computing / Research on KV cache compaction in Prof. Hyunwoo J. Kim's Machine Learning & Vision Lab |
+| 학력 | Seongdeok High School / Gwangju, South Korea / 2022–2024 |
 | 이메일 | Academic: `aston4215@kaist.ac.kr` |
 | 이메일 | General: `office.aston4215@gmail.com` |
 | GitHub | `office-aston4215` (`https://github.com/office-aston4215`) |
@@ -160,9 +160,14 @@ Apple 기기에서는 시스템 서체인 SF로 표시한다. 그 외 기기를 
                                           [KAIST, 교수, 사이트  ]
 =================================================================
  ----------------------------------------------------------------
- Education          Spring 2027     UC Berkeley, Exchange Program
-                    2025–present    KAIST, School of Computing
-                    2022–2024       Seongdeok High School, Gwangju
+ Education          University of California, Berkeley    Spring 2027
+                    Berkeley, California, USA
+                    Exchange Program
+
+                    Korea Advanced Institute of ...      2025–present
+                    Daejeon, South Korea
+                    Undergraduate, School of Computing
+                    Research on KV cache compaction ...
  ----------------------------------------------------------------
  Contact            Academic        aston4215@kaist.ac.kr
                     General         office.aston4215@gmail.com
@@ -179,6 +184,7 @@ Apple 기기에서는 시스템 서체인 SF로 표시한다. 그 외 기기를 
 | 타일 폭 | 강조 8열, 일반 4열, 간격 16px |
 | 사양표 제목과 값 | 제목 1~4열, 값 5~12열 |
 | 사양표 왼쪽 값 열 | 150px, 모바일 118px |
+| 사진 아래와 띠 사이 여백 | Hero 위 여백과 같은 값 |
 
 768px 미만에서는 타일과 사양표 제목을 한 열로 쌓고, 사양표 행의 두 열은 유지한다. 380px 미만에서는 사양표 행도 한 열로 쌓아 이메일 주소가 중간에서 끊기지 않게 한다.
 
@@ -192,9 +198,9 @@ Apple 기기에서는 시스템 서체인 SF로 표시한다. 그 외 기기를 
 ### 사진
 
 - 원본은 1555×2000 JPEG이고 EXIF 위치 정보가 없다. 잘라내지 않고 비율을 유지한다.
-- 폭 `min(340px, 64vw)`로 가운데에 두고, 아래쪽을 띠 배경에 맞닿게 한다.
+- 폭 `min(340px, 64vw)`로 가운데에 두고, 아래쪽에 헤더와 이름 사이만큼의 여백을 둔다.
 - 라이트 모드에서는 테두리 없이 배경을 페이지와 잇는다.
-- 다크 모드에서는 위쪽 모서리만 28px로 둥글게 하고 `filter: brightness(.92)`를 준다.
+- 다크 모드에서는 모서리를 28px로 둥글게 하고 `filter: brightness(.92)`를 준다.
 - Astro 이미지 처리로 AVIF, WebP, JPEG와 340·680·1020px 폭을 생성하고 즉시 로드한다.
 - 대체 텍스트는 `Portrait of Tae-Yoon Kim`이다.
 
@@ -224,7 +230,7 @@ Astro Content Collections로 형식을 검증한다. 형식이 틀리면 빌드�
 | 컬렉션 | 파일 | 필드 |
 |---|---|---|
 | `profile` | `src/content/profile.yaml` | `id`, `name`, `lead`, `research`, `lab`, `labUrl`, `institution`, `professor`, `emails[]` (`label`, `address`), `links[]` (`label`, `handle`, `url`) |
-| `education` | `src/content/education.yaml` | `id`, `period`, `start`, `title` |
+| `education` | `src/content/education.yaml` | `id`, `school`, `location`, `period`, `start`, `details[]` (기본값 빈 목록) |
 | `publications` | `src/content/publications.yaml` | `id`, `period`, `start`, `title`, `authors[]`, `venue`, `url?` |
 | `projects` | `src/content/projects.yaml` | `id`, `period`, `start`, `title`, `summary`, `url?` |
 | `notes` | `src/content/notes/*.md` | `title`, `date`, `summary`, `draft` (기본값 `false`) |
@@ -245,9 +251,10 @@ Astro Content Collections로 형식을 검증한다. 형식이 틀리면 빌드�
 | `KvGraphic.astro` | 셀 그래픽과 범례 | 없음 |
 | `SpecBlock.astro` | 사양표 제목과 행 묶음 | `id`, `title` |
 | `SpecRow.astro` | 왼쪽 메타데이터와 오른쪽 값 한 행 | `label`, slot |
+| `EducationEntry.astro` | 학교 부제목, 위치, 기간, 세부 항목 | `school`, `location`, `period`, `details` |
 | `Footer.astro` | 저작권 표기와 도메인 | 없음 |
 
-Publications와 Projects는 `SpecBlock`과 `SpecRow`를 재사용한다. 영역별로 다른 레이아웃을 만들지 않는다.
+Publications, Projects, Contact는 `SpecBlock`과 `SpecRow`를 재사용한다. Education은 학교를 부제목으로 쓰기 위해 `SpecBlock`과 `EducationEntry`를 쓴다.
 
 ## 8. 기술 구조
 
@@ -352,7 +359,7 @@ Actions 배포에서는 GitHub가 `CNAME` 파일을 쓰지 않으므로 `public/
 | 논문 | `src/content/publications.yaml`에 항목 추가 |
 | 프로젝트 | `src/content/projects.yaml`에 항목 추가 |
 | 글 | `src/content/notes/<slug>.md` 추가 |
-| 학력 | `src/content/education.yaml`에 항목 추가 |
+| 학력 | `src/content/education.yaml`에 항목을 추가하거나 `details`에 줄 추가 |
 | 소개, 연락처 | `src/content/profile.yaml` 수정 |
 
 저장한 뒤 `main`에 Push하면 자동으로 배포된다.

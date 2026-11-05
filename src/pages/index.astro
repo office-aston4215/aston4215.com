@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
+import EducationEntry from '../components/EducationEntry.astro';
 import Hero from '../components/Hero.astro';
 import KvGraphic from '../components/KvGraphic.astro';
 import SpecBlock from '../components/SpecBlock.astro';
@@ -59,8 +60,12 @@ const projects = (await getCollection('projects')).sort(newestFirst);
         </SpecBlock>
       )
     }
-    <SpecBlock id="education" title="Education">
-      {education.map(({ data }) => <SpecRow label={data.period}>{data.title}</SpecRow>)}
+    <SpecBlock id="education" title="Education" as="div">
+      {
+        education.map(({ data }) => (
+          <EducationEntry school={data.school} location={data.location} period={data.period} details={data.details} />
+        ))
+      }
     </SpecBlock>
     <SpecBlock id="contact" title="Contact">
       {

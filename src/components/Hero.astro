@@ -32,7 +32,7 @@ const leadText = lead
 
 <style>
   .hero {
-    padding-top: clamp(48px, 6vw, 72px);
+    padding-block: clamp(48px, 6vw, 72px);
     text-align: center;
   }
 
@@ -63,7 +63,7 @@ const leadText = lead
 
   @media (prefers-color-scheme: dark) {
     .hero :global(.portrait) {
-      border-radius: 28px 28px 0 0;
+      border-radius: 28px;
       filter: brightness(0.92);
     }
   }

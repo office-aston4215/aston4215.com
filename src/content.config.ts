@@ -61,7 +61,16 @@ const timelineEntry = {
 
 const education = defineCollection({
   loader: yamlFile(`${CONTENT_DIR}/education.yaml`),
-  schema: z.object(timelineEntry).strict(),
+  schema: z
+    .object({
+      id: z.string(),
+      school: z.string(),
+      location: z.string(),
+      period: z.string(),
+      start: z.number().int(),
+      details: z.array(z.string()).default([]),
+    })
+    .strict(),
 });
 
 const publications = defineCollection({

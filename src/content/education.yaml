@@ -1,12 +1,20 @@
 - id: uc-berkeley
+  school: University of California, Berkeley
+  location: Berkeley, California, USA
   period: Spring 2027
   start: 2027
-  title: UC Berkeley, Exchange Program
+  details:
+    - Exchange Program
 - id: kaist
+  school: Korea Advanced Institute of Science and Technology (KAIST)
+  location: Daejeon, South Korea
   period: 2025–present
   start: 2025
-  title: KAIST, School of Computing
+  details:
+    - Undergraduate, School of Computing
+    - Research on KV cache compaction in Prof. Hyunwoo J. Kim's Machine Learning & Vision Lab
 - id: seongdeok
+  school: Seongdeok High School
+  location: Gwangju, South Korea
   period: 2022–2024
   start: 2022
-  title: Seongdeok High School, Gwangju

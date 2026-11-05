@@ -51,7 +51,7 @@ export function buildFixture(files) {
         env: { ...process.env, CONTENT_DIR: dir },
       });
       r.output = r.stdout + r.stderr;
-      if (attempt === 4 || !/EPERM|EBUSY/.test(r.output)) return r;
+      if (attempt === 4 || !/EPERM|EBUSY|ENOTEMPTY/.test(r.output)) return r;
       spawnSync('node', ['-e', 'setTimeout(() => {}, 1500)']);
     }
   } finally {

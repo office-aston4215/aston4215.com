@@ -136,6 +136,19 @@ async function run(label, type, launch = {}) {
   );
   check(label, '1440x900 shows name, lead and portrait', fold.every((b) => b <= 900), fold.join(','));
 
+  for (const width of WIDTHS) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(base, { waitUntil: 'networkidle' });
+    const gaps = await page.evaluate(() => {
+      const header = document.querySelector('header').getBoundingClientRect();
+      const name = document.querySelector('h1').getBoundingClientRect();
+      const portrait = document.querySelector('.portrait').getBoundingClientRect();
+      const band = document.querySelector('#research').getBoundingClientRect();
+      return { above: name.top - header.bottom, below: band.top - portrait.bottom };
+    });
+    check(label, `${width}px space under the portrait matches the space above the name`, Math.abs(gaps.above - gaps.below) <= 1, JSON.stringify(gaps));
+  }
+
   await page.setViewportSize({ width: 1440, height: 700 });
   for (const id of ['research', 'education', 'contact']) {
     await page.goto(base, { waitUntil: 'networkidle' });

@@ -2,16 +2,18 @@
 interface Props {
   id: string;
   title: string;
+  /** Use 'div' when the block holds entries instead of SpecRow label and value pairs. */
+  as?: 'dl' | 'div';
 }
 
-const { id, title } = Astro.props;
+const { id, title, as: Content = 'dl' } = Astro.props;
 ---
 
 <section class="block" id={id}>
   <h2>{title}</h2>
-  <dl>
+  <Content class="content">
     <slot />
-  </dl>
+  </Content>
 </section>
 
 <style>
@@ -31,14 +33,14 @@ const { id, title } = Astro.props;
     font-weight: 600;
   }
 
-  dl {
+  .content {
     grid-column: 5 / 13;
     min-width: 0;
   }
 
   @media (max-width: 767px) {
     h2,
-    dl {
+    .content {
       grid-column: 1 / -1;
     }
 
