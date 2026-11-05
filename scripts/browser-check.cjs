@@ -1,4 +1,5 @@
 // Usage: PW_DIR=<folder with playwright installed> [SKIP_BROWSERS=firefox] [PAGES=/,/notes/] node scripts/browser-check.cjs <url> <output folder>
+// Runs on every push in .github/workflows/deploy.yml, so there is no need to install browsers locally.
 // Playwright stays out of package.json; it is only needed for this check.
 const fs = require('node:fs');
 const path = require('node:path');
