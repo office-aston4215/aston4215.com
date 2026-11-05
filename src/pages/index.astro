@@ -1,8 +1,10 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
+import ContactCard from '../components/ContactCard.astro';
 import CvEntry from '../components/CvEntry.astro';
 import Hero from '../components/Hero.astro';
 import KvGraphic from '../components/KvGraphic.astro';
+import LabCard from '../components/LabCard.astro';
 import SpecBlock from '../components/SpecBlock.astro';
 import SpecRow from '../components/SpecRow.astro';
 import Tile from '../components/Tile.astro';
@@ -19,30 +21,31 @@ const honors = (await getCollection('honors')).sort(newestFirst);
 const experience = (await getCollection('experience')).sort(newestFirst);
 const leadership = (await getCollection('leadership')).sort(newestFirst);
 const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+const contactCount = profile.emails.length + profile.links.length;
 ---
 
 <Base title={profile.name} description={profile.lead.join(', ')}>
   <Hero name={profile.name} lead={profile.lead} />
 
   <section class="band" id="research">
-    <div class="container bento">
-      <Tile label="Research" title={profile.research} emphasis>
+    <div class="container">
+      <h2 class="section-title">Research</h2>
+      <Tile title={profile.research}>
         <KvGraphic />
-      </Tile>
-      <Tile label="Lab" title={profile.lab}>
-        <p class="lab-details">
-          {profile.institution}
-          <span class="muted">{`Advisor: ${profile.advisor}`}</span>
-          <a class="lab-link" href={profile.labUrl}>Visit lab site ›</a>
-        </p>
       </Tile>
     </div>
   </section>
 
+  <section class="band" id="labs">
+    <div class="container">
+      <h2 class="section-title">Labs</h2>
+      <div class="lab-grid">
+        {research.map(({ data }) => <LabCard {...data} />)}
+      </div>
+    </div>
+  </section>
+
   <div class="container specs">
-    <SpecBlock id="research-experience" title="Research Experience" as="div">
-      {research.map(({ data }) => <CvEntry {...data} />)}
-    </SpecBlock>
     {
       publications.length > 0 && (
         <SpecBlock id="publications" title="Publications">
@@ -90,23 +93,17 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
     <SpecBlock id="skills" title="Skills & Interests">
       {skills.map(({ data }) => <SpecRow label={data.label}>{data.value}</SpecRow>)}
     </SpecBlock>
-    <SpecBlock id="contact" title="Contact">
-      {
-        profile.emails.map((email) => (
-          <SpecRow label={email.label}>
-            <a href={`mailto:${email.address}`}>{email.address}</a>
-          </SpecRow>
-        ))
-      }
-      {
-        profile.links.map((link) => (
-          <SpecRow label={link.label}>
-            <a href={link.url}>{link.handle}</a>
-          </SpecRow>
-        ))
-      }
-    </SpecBlock>
   </div>
+
+  <section class="band" id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <div class="contact-grid" style={`--columns: ${contactCount % 3 === 0 ? 3 : 2}`}>
+        {profile.emails.map((email) => <ContactCard href={`mailto:${email.address}`} title={email.label} handle={email.address} icon="Email" />)}
+        {profile.links.map((link) => <ContactCard href={link.url} title={link.label} handle={link.handle} icon={link.label} />)}
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -115,15 +112,14 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
     background: var(--band);
   }
 
-  .bento {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 16px;
+  .band + .band {
+    padding-top: 0;
   }
 
-  .lab-details {
-    margin-top: auto;
-    padding-top: 48px;
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
   }
 
   .muted {
@@ -131,13 +127,31 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.d
     color: var(--muted);
   }
 
-  .lab-link {
-    display: inline-block;
-    margin-top: 10px;
-    font-weight: 500;
-  }
-
   .specs {
     padding-block: clamp(56px, 7vw, 96px) clamp(24px, 4vw, 48px);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 899px) {
+    .contact-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .lab-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 559px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

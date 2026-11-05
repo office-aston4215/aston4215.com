@@ -24,7 +24,7 @@ test('Person data matches the spec and omits alumniOf', () => {
   assert.equal(person.name, 'Tae-Yoon Kim');
   assert.equal(person.url, 'https://aston4215.com/');
   assert.deepEqual(person.email, ['aston4215@kaist.ac.kr', 'office.aston4215@gmail.com']);
-  assert.deepEqual(person.sameAs, ['https://github.com/office-aston4215', 'https://www.instagram.com/aston._.4215/']);
+  assert.deepEqual(person.sameAs, ['https://github.com/office-aston4215', 'https://www.linkedin.com/in/taeyoon-kim-aston4215', 'https://www.instagram.com/aston._.4215/']);
   assert.equal(person.affiliation.name, 'KAIST');
   assert.ok(person.image.startsWith('https://aston4215.com/'));
   assert.ok(!('alumniOf' in person));

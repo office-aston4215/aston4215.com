@@ -1,0 +1,60 @@
+---
+import ContactIcon from './ContactIcon.astro';
+
+interface Props {
+  href?: string;
+  title: string;
+  handle?: string;
+  icon: 'Email' | 'GitHub' | 'Instagram' | 'Google Scholar' | 'LinkedIn';
+}
+
+const { href, title, handle, icon } = Astro.props;
+const Card = href ? 'a' : 'div';
+---
+
+<Card class="contact-card" href={href}>
+  <ContactIcon name={icon} />
+  <span class="contact-title">{title}</span>
+  {handle && <span class="contact-handle">{handle}</span>}
+</Card>
+
+<style>
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: clamp(20px, 2.4vw, 28px);
+    border-radius: 20px;
+    background: var(--tile);
+  }
+
+  .contact-card:hover {
+    text-decoration: none;
+  }
+
+  /* Not a link yet, so it stays quieter than the cards that are. */
+  div.contact-card {
+    color: var(--muted);
+  }
+
+  .contact-title {
+    margin-top: clamp(24px, 3vw, 36px);
+    font-size: 19px;
+    line-height: 1.25;
+    letter-spacing: -0.016em;
+    font-weight: 600;
+  }
+
+  .contact-handle {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-card:hover .contact-handle {
+    text-decoration: underline;
+  }
+</style>

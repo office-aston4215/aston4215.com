@@ -8,8 +8,10 @@ function tokens(block) {
   return Object.fromEntries([...block.matchAll(/--([a-z-]+):\s*(#[0-9A-Fa-f]{6})/g)].map((m) => [m[1], m[2]]));
 }
 
-const light = tokens(css.slice(0, css.indexOf('prefers-color-scheme: dark')));
-const dark = { ...light, ...tokens(css.slice(css.indexOf('prefers-color-scheme: dark'))) };
+const darkStart = css.indexOf("[data-theme='dark']");
+assert.ok(darkStart > 0, 'dark theme block not found');
+const light = tokens(css.slice(0, darkStart));
+const dark = { ...light, ...tokens(css.slice(darkStart)) };
 
 function luminance(hex) {
   const [r, g, b] = [1, 3, 5]
@@ -33,6 +35,8 @@ const pairs = [
   ['button-text', 'button-bg'],
   ['feature-text', 'feature'],
   ['feature-label', 'feature'],
+  ['text', 'track'],
+  ['text', 'thumb'],
 ];
 
 for (const [mode, t] of [['light', light], ['dark', dark]]) {

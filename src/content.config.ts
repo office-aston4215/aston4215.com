@@ -31,7 +31,11 @@ const yamlFile = (path: string): Loader => {
   };
 };
 
-const link = z.object({ label: z.string(), handle: z.string(), url: z.url() }).strict();
+// The label picks the logo in ContactIcon.astro, so a new channel has to bring its logo.
+// Without a url the card shows only its logo and name, and is not a link.
+const link = z
+  .object({ label: z.enum(['GitHub', 'Instagram', 'Google Scholar', 'LinkedIn']), handle: z.string().optional(), url: z.url().optional() })
+  .strict();
 const email = z.object({ label: z.string(), address: z.email() }).strict();
 
 // period is shown as written. start sorts newest first and is YYYY or YYYY-MM.
@@ -60,17 +64,28 @@ const profile = defineCollection({
       headerLabel: z.string(),
       lead: z.array(z.string()).min(1),
       research: z.string(),
-      lab: z.string(),
-      labUrl: z.url(),
       institution: z.string(),
-      advisor: z.string(),
       emails: z.array(email).min(1),
       links: z.array(link),
     })
     .strict(),
 });
 
-const research = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/research.yaml`), schema: cvEntry });
+const research = defineCollection({
+  loader: yamlFile(`${CONTENT_DIR}/research.yaml`),
+  schema: z
+    .object({
+      ...timeline,
+      course: z.string(),
+      role: z.string(),
+      advisor: z.string(),
+      location: z.string(),
+      url: z.url(),
+      logo: z.enum(['mlv', 'url']),
+      details: z.array(z.string()).min(1),
+    })
+    .strict(),
+});
 const education = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/education.yaml`), schema: cvEntry });
 const experience = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/experience.yaml`), schema: cvEntry });
 const leadership = defineCollection({ loader: yamlFile(`${CONTENT_DIR}/leadership.yaml`), schema: cvEntry });

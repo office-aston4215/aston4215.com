@@ -6,10 +6,10 @@ import { readDist, sectionById } from './helpers.mjs';
 const home = readDist('index.html');
 const section = sectionById(home, 'research');
 
-test('research section shows topic, lab, professor and lab link', () => {
-  for (const text of ['Research', 'KV cache compaction', 'Lab', 'KAIST', 'Prof. Hyunwoo J. Kim'])
-    assert.ok(section.includes(text), text);
-  assert.match(section, /href="https:\/\/mlv\.kaist\.ac\.kr\/"[^>]*>\s*Visit lab site ›/);
+test('research section shows the topic and leaves labs to their own section', () => {
+  assert.match(section, /<h2[^>]*>Research<\/h2>/);
+  assert.ok(section.includes('KV cache compaction'));
+  assert.ok(!section.includes('Lab'), 'a lab is still inside the research section');
 });
 
 test('scroll timeline survives CSS minification', () => {

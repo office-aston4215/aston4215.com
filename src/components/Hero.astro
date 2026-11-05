@@ -62,10 +62,8 @@ const { name, lead } = Astro.props;
     margin: clamp(28px, 3vw, 40px) auto 0;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .hero :global(.portrait) {
-      border-radius: 28px;
-      filter: brightness(0.92);
-    }
+  :global([data-theme='dark']) .hero :global(.portrait) {
+    border-radius: 28px;
+    filter: brightness(0.92);
   }
 </style>

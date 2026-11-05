@@ -13,27 +13,45 @@ function assertIncludes(html, values) {
 }
 
 test('sections follow the CV order', () => {
-  const ids = ['research', 'research-experience', 'education', 'honors', 'experience', 'leadership', 'skills', 'contact'];
+  const ids = ['research', 'labs', 'education', 'honors', 'experience', 'leadership', 'skills', 'contact'];
   const positions = ids.map((id) => home.indexOf(`id="${id}"`));
   assert.ok(positions.every((p) => p >= 0), positions.join());
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);
 });
 
-test('research experience lists both labs with details, newest first', () => {
-  const section = sectionById(home, 'research-experience');
-  assert.deepEqual(subheadings(section), [
-    'KAIST Machine Learning and Vision Lab, Individual Study (CS.91100)',
-    'KAIST Urban Robotics Lab, Individual Study (EE.91100)',
-  ]);
+test('labs section has a card for each lab, newest first', () => {
+  const section = sectionById(home, 'labs');
+  assert.match(section, /<h2[^>]*>Labs<\/h2>/);
+  assert.deepEqual(subheadings(section), ['Machine Learning & Vision Lab', 'Urban Robotics Lab']);
+  assert.ok(!home.includes('id="research-experience"'), 'lab experience is shown twice');
   assertIncludes(section, [
-    'Undergraduate Research Student, Advisor: Prof. Hyunwoo J. Kim',
-    'Undergraduate Research Student, Advisor: Prof. Hyun Myung',
+    'Individual Study (CS.91100)',
+    'Individual Study (EE.91100)',
+    'KAIST, Daejeon, Korea',
+    'Undergraduate Research Student',
+    'Advisor: Prof. Hyunwoo J. Kim',
+    'Advisor: Prof. Hyun Myung',
     'September 2026 – Present',
     'June 2026 – August 2026',
     'Studied frontier LLM architectures (Kimi K3, GLM-5.3-Flash) and FlashAttention versions 1 through 4',
     'Developing Gramian SVD Checkpoint Compaction',
     'finding DAISY most accurate (29.5% inlier ratio)',
   ]);
+});
+
+test('each lab card shows the lab logo and links to its site', () => {
+  const section = sectionById(home, 'labs');
+  const cards = section.split('<article').slice(1);
+  assert.equal(cards.length, 2);
+  for (const [card, url, name] of [
+    [cards[0], 'https://mlv.kaist.ac.kr/', 'Machine Learning &amp; Vision Lab'],
+    [cards[1], 'https://urobot.kaist.ac.kr/', 'Urban Robotics Lab'],
+  ]) {
+    assert.match(card, /<img[^>]*\salt(="")?[\s>]/, name);
+    assert.ok(card.includes(`href="${url}"`), url);
+    assert.ok(card.includes(`aria-label="Visit lab site: ${name}"`), name);
+    assert.match(card, />\s*Visit lab site ›/);
+  }
 });
 
 test('education uses schools as subheadings, newest first', () => {
@@ -98,10 +116,6 @@ test('skills keep the CV order', () => {
   assert.deepEqual(labels, ['Technical', 'Language', 'Research Interests']);
 });
 
-test('the lab tile names the advisor', () => {
-  assertIncludes(sectionById(home, 'research'), ['Advisor: Prof. Hyunwoo J. Kim']);
-});
-
 test('phone number and street address stay off the site', () => {
   assert.ok(!/\+\d{1,3}[\s-]?\d|\b\d{2,3}-\d{3,4}-\d{4}\b/.test(stripTags(home)), 'phone number found');
   assert.ok(!/\bDaehak-ro\b|\bYuseong-gu\b/.test(home), 'street address found');
@@ -109,13 +123,38 @@ test('phone number and street address stay off the site', () => {
 
 test('contact has every public channel', () => {
   const section = sectionById(home, 'contact');
-  for (const href of ['mailto:aston4215@kaist.ac.kr', 'mailto:office.aston4215@gmail.com', 'https://github.com/office-aston4215', 'https://www.instagram.com/aston._.4215/'])
-    assert.ok(section.includes(href), href);
-  for (const label of ['Academic', 'General', 'GitHub', 'Instagram', '@aston._.4215']) assert.ok(section.includes(label), label);
+  for (const href of ['mailto:aston4215@kaist.ac.kr', 'mailto:office.aston4215@gmail.com', 'https://github.com/office-aston4215', 'https://www.instagram.com/aston._.4215/', 'https://www.linkedin.com/in/taeyoon-kim-aston4215'])
+    assert.ok(section.includes(`href="${href}"`), href);
+  for (const label of ['Academic', 'General', 'GitHub', 'Instagram', '@aston._.4215', 'LinkedIn', 'taeyoon-kim-aston4215']) assert.ok(section.includes(label), label);
+});
+
+test('every contact channel is a whole-card link with a logo', () => {
+  const section = sectionById(home, 'contact');
+  const cards = [...section.matchAll(/<a\b[^>]*class="[^"]*contact-card[^"]*"[^>]*>[\s\S]*?<\/a>/g)].map((m) => m[0]);
+  assert.equal(cards.length, 5);
+  for (const card of cards) assert.match(card, /<svg[^>]*aria-hidden="true"[^>]*>\s*<path/);
+  assert.ok(!section.includes('<dl'), 'contact is still a text list');
+  assert.match(section, /--columns:\s*3/);
+});
+
+test('Google Scholar has a card with its logo but no link yet', () => {
+  const section = sectionById(home, 'contact');
+  const card = section.match(/<div\b[^>]*class="[^"]*contact-card[^"]*"[^>]*>[\s\S]*?Google Scholar[\s\S]*?<\/div>/)?.[0] ?? '';
+  assert.match(card, /<svg[^>]*aria-hidden="true"[^>]*>\s*<path/);
+  assert.ok(!card.includes('href'), 'the Scholar card must not be a link');
+  assert.ok(!section.includes('scholar.google'), 'no Scholar address until there is a profile');
+});
+
+test('contact channels put academic ones first', () => {
+  const text = plain(sectionById(home, 'contact'));
+  const order = ['Academic', 'General', 'Google Scholar', 'GitHub', 'LinkedIn', 'Instagram'];
+  const positions = order.map((label) => text.indexOf(label));
+  assert.ok(positions.every((p) => p >= 0), positions.join());
+  assert.deepEqual([...positions].sort((a, b) => a - b), positions);
 });
 
 test('label and value sections use definition list markup', () => {
-  for (const id of ['contact', 'skills', 'honors']) {
+  for (const id of ['skills', 'honors']) {
     const section = sectionById(home, id);
     assert.match(section, /<dl/, id);
     assert.match(section, /<dt/, id);
@@ -124,6 +163,6 @@ test('label and value sections use definition list markup', () => {
 });
 
 test('empty sections and excluded profiles stay hidden', () => {
-  for (const text of ['id="publications"', 'id="projects"', '/notes/', 'scholar.google', 'linkedin.com']) assert.ok(!home.includes(text), text);
+  for (const text of ['id="publications"', 'id="projects"', '/notes/']) assert.ok(!home.includes(text), text);
   assert.ok(!existsSync('dist/notes'));
 });

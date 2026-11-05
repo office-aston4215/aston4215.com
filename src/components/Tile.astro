@@ -1,16 +1,13 @@
 ---
 interface Props {
-  label: string;
   title: string;
-  emphasis?: boolean;
 }
 
-const { label, title, emphasis = false } = Astro.props;
+const { title } = Astro.props;
 ---
 
-<article class:list={['tile', { emphasis }]}>
-  <span class="label">{label}</span>
-  <h2>{title}</h2>
+<article class="tile">
+  <h3>{title}</h3>
   <slot />
 </article>
 
@@ -18,47 +15,18 @@ const { label, title, emphasis = false } = Astro.props;
   .tile {
     display: flex;
     flex-direction: column;
-    grid-column: span 4;
     min-width: 0;
     padding: clamp(24px, 3vw, 36px);
     border-radius: 28px;
-    background: var(--tile);
-  }
-
-  .emphasis {
-    grid-column: span 8;
     background: var(--feature);
     color: var(--feature-text);
   }
 
-  .label {
-    color: var(--muted);
-    font: 500 13px/1.3 var(--mono);
-    letter-spacing: 0;
-  }
-
-  .emphasis .label {
-    color: var(--feature-label);
-  }
-
-  h2 {
-    margin-top: 10px;
-    font-size: clamp(26px, 2.8vw, 32px);
-    line-height: 1.1;
-    letter-spacing: -0.022em;
-    font-weight: 600;
-  }
-
-  .emphasis h2 {
+  h3 {
+    margin: 0;
     font-size: clamp(30px, 4vw, 48px);
     line-height: 1.05;
     letter-spacing: -0.028em;
-  }
-
-  @media (max-width: 767px) {
-    .tile,
-    .emphasis {
-      grid-column: 1 / -1;
-    }
+    font-weight: 600;
   }
 </style>

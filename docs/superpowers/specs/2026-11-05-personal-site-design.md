@@ -42,7 +42,7 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 - KV cache compaction의 정의나 성과 설명은 제공되기 전까지 쓰지 않는다.
 - 논문과 프로젝트는 현재 없거나 비공개이므로 표시하지 않는다.
 - CV의 전화번호와 우편 주소는 공개 연락처 범위 밖이므로 표시하지 않는다. CV 원본 파일도 저장소에 넣지 않는다.
-- Google Scholar와 LinkedIn 링크는 넣지 않는다.
+- LinkedIn을 공개한다. Google Scholar는 논문이 생길 때까지 링크 없는 카드로 둔다.
 
 ## 3. 범위
 
@@ -50,7 +50,8 @@ KAIST 학부생 연구자 Tae-Yoon Kim의 개인 사이트를 만든다. 교수�
 
 - 원페이지 홈 `/`와 `/404`
 - 상단 고정 내비게이션 헤더
-- 라이트·다크 모드 자동 전환 (기기 설정을 따르며 전환 버튼 없음)
+- 기본 라이트 테마와 Footer의 Light/Dark 전환 컨트롤 (기기 설정을 따르지 않고, 방문자의 선택을 브라우저에 저장)
+- Research 카드, 연구실 로고를 쓴 Labs 카드, 로고를 쓴 Contact 카드 (이 카드들이 이전의 Research Experience 목록과 Contact 표를 대체)
 - 스크롤에 연동되는 KV 셀 모션 1개
 - 파비콘, 공유 이미지, sitemap, robots.txt, 구조화 데이터
 - GitHub Actions 자동 배포
@@ -262,7 +263,7 @@ Publications, Projects, Honors & Awards, Skills & Interests, Contact는 `SpecBlo
 
 ## 8. 기술 구조
 
-- 프레임워크: Astro 7 (정적 출력, 기본 클라이언트 JavaScript 없음)
+- 프레임워크: Astro 7 (정적 출력, 클라이언트 JavaScript는 테마 전환용 인라인 스크립트 2개뿐)
 - 의존성: `astro`, `@astrojs/sitemap`, `@astrojs/check`, `typescript@^6`, `@fontsource-variable/inter`
 - 패키지 관리자: npm, `package-lock.json`을 커밋한다
 - 스타일: `src/styles/global.css`의 CSS 변수와 컴포넌트 범위 스타일. CSS 프레임워크는 쓰지 않는다

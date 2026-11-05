@@ -11,6 +11,7 @@ const hasNotes = (await getCollection('notes')).some(isPublished);
 
 const items: { label: string; href: string; always?: boolean }[] = [
   { label: 'Research', href: '/#research' },
+  { label: 'Labs', href: '/#labs' },
   ...(hasPublications ? [{ label: 'Publications', href: '/#publications' }] : []),
   ...(hasProjects ? [{ label: 'Projects', href: '/#projects' }] : []),
   { label: 'Education', href: '/#education' },
@@ -18,7 +19,7 @@ const items: { label: string; href: string; always?: boolean }[] = [
   { label: 'Experience', href: '/#experience' },
   { label: 'Contact', href: '/#contact' },
   ...(hasNotes ? [{ label: 'Notes', href: '/notes/', always: true }] : []),
-  ...(github ? [{ label: github.label, href: github.url }] : []),
+  ...(github?.url ? [{ label: github.label, href: github.url }] : []),
 ];
 ---
 

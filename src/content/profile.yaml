@@ -5,19 +5,20 @@
     - Korea Advanced Institute of Science and Technology Undergraduate
     - AI & Software Researcher
   research: KV cache compaction
-  lab: Machine Learning & Vision Lab
-  labUrl: https://mlv.kaist.ac.kr/
   institution: KAIST
-  advisor: Prof. Hyunwoo J. Kim
   emails:
     - label: Academic
       address: aston4215@kaist.ac.kr
     - label: General
       address: office.aston4215@gmail.com
   links:
+    - label: Google Scholar
     - label: GitHub
       handle: office-aston4215
       url: https://github.com/office-aston4215
+    - label: LinkedIn
+      handle: taeyoon-kim-aston4215
+      url: https://www.linkedin.com/in/taeyoon-kim-aston4215
     - label: Instagram
       handle: "@aston._.4215"
       url: https://www.instagram.com/aston._.4215/

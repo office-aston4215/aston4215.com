@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import mlv from '../assets/labs/mlv.png';
+import url from '../assets/labs/url.png';
+
+interface Props {
+  title: string;
+  course: string;
+  role: string;
+  advisor: string;
+  location: string;
+  period: string;
+  url: string;
+  logo: 'mlv' | 'url';
+  details: string[];
+}
+
+const { title, course, role, advisor, location, period, url: site, logo, details } = Astro.props;
+
+// Heights differ on purpose: the heavy URL letters look as large as the fine MLV line work at a smaller size.
+const logos = {
+  mlv: { src: mlv, height: 44 },
+  url: { src: url, height: 30 },
+};
+const { src, height } = logos[logo];
+---
+
+<article class="lab">
+  <div class="logo-slot">
+    <Image class="logo" src={src} alt="" style={`height: ${height}px`} />
+  </div>
+  <span class="period">{period}</span>
+  <h3>{title}</h3>
+  <p class="meta">{role}</p>
+  <p class="meta">{`Advisor: ${advisor}`}</p>
+  <p class="meta">{`${course}, ${location}`}</p>
+  <ul>{details.map((detail) => <li>{detail}</li>)}</ul>
+  <a class="site" href={site} aria-label={`Visit lab site: ${title}`}>Visit lab site ›</a>
+</article>
+
+<style>
+  .lab {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: 28px;
+    background: var(--tile);
+  }
+
+  .logo-slot {
+    display: flex;
+    align-items: center;
+    height: 44px;
+  }
+
+  .logo-slot :global(.logo) {
+    display: block;
+    width: auto;
+  }
+
+  /* The logos are stored in black so one file serves both themes. */
+  :global([data-theme='dark']) .logo-slot :global(.logo) {
+    filter: invert(1);
+  }
+
+  .period {
+    margin-top: clamp(28px, 3vw, 40px);
+    color: var(--muted);
+    font: 400 14px/1.5 var(--mono);
+    letter-spacing: 0;
+  }
+
+  h3 {
+    margin: 6px 0 8px;
+    font-size: clamp(26px, 2.8vw, 32px);
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+    font-weight: 600;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  ul {
+    margin: 20px 0 24px;
+    padding-left: 1.1em;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  li + li {
+    margin-top: 8px;
+  }
+
+  .site {
+    margin-top: auto;
+    font-weight: 500;
+  }
+</style>

@@ -6,11 +6,48 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container row">
-    <span>Copyright © {year} {profile.name}</span>
-    <span>aston4215.com</span>
+  <div class="container">
+    <div class="row">
+      <span>Copyright © {year} {profile.name}</span>
+      <span class="domain">aston4215.com</span>
+      <div class="theme-toggle" role="group" aria-label="Theme">
+        <button type="button" data-theme-choice="light" aria-pressed="true">Light</button>
+        <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
   </div>
 </footer>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const choices = document.querySelectorAll('[data-theme-choice]');
+    const syncPressed = () => {
+      for (const choice of choices) choice.setAttribute('aria-pressed', String(choice.dataset.themeChoice === root.dataset.theme));
+    };
+    const setTheme = (theme) => {
+      root.dataset.theme = theme;
+      syncPressed();
+      try {
+        localStorage.setItem('theme', theme);
+      } catch {}
+    };
+
+    syncPressed();
+    for (const choice of choices) {
+      choice.addEventListener('click', () => {
+        const theme = choice.dataset.themeChoice;
+        if (theme === root.dataset.theme) return;
+        // A browser without view transitions, or a visitor who asked for less motion, gets an instant switch.
+        if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.startViewTransition(() => setTheme(theme));
+        } else {
+          setTheme(theme);
+        }
+      });
+    }
+  })();
+</script>
 
 <style>
   .site-footer {
@@ -21,8 +58,56 @@ const year = new Date().getFullYear();
 
   .row {
     display: flex;
-    justify-content: space-between;
-    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
     padding-block: 18px;
+    border-top: 1px solid var(--line);
+  }
+
+  .domain {
+    margin-right: auto;
+  }
+
+  .theme-toggle {
+    display: flex;
+    padding: 2px;
+    border-radius: 980px;
+    background: var(--track);
+  }
+
+  /* The pill is 28px tall. The ::after extends the tap target to 44px without changing how it looks. */
+  button {
+    position: relative;
+    min-width: 52px;
+    height: 28px;
+    padding-inline: 12px;
+    border: 0;
+    border-radius: 980px;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  button::after {
+    content: '';
+    position: absolute;
+    inset: -8px 0;
+  }
+
+  button[aria-pressed='true'] {
+    background: var(--thumb);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.14);
+  }
+
+  button:focus-visible {
+    border-radius: 980px;
+  }
+
+  /* The theme scripts never ran, so the buttons could do nothing. */
+  :global(html:not([data-theme])) .theme-toggle {
+    display: none;
   }
 </style>

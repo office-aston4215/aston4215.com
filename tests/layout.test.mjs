@@ -7,7 +7,7 @@ const notFound = readDist('404.html');
 
 test('nav lists only existing sections', () => {
   const nav = between(home, '<nav', '</nav>');
-  for (const href of ['/#research', '/#education', '/#experience', '/#honors', '/#contact', 'https://github.com/office-aston4215', 'mailto:aston4215@kaist.ac.kr'])
+  for (const href of ['/#research', '/#labs', '/#education', '/#experience', '/#honors', '/#contact', 'https://github.com/office-aston4215', 'mailto:aston4215@kaist.ac.kr'])
     assert.ok(nav.includes(href), href);
   for (const label of ['Publications', 'Projects', 'Notes'])
     assert.ok(!nav.includes(label), label);
@@ -27,8 +27,10 @@ test('skip link targets main', () => {
 
 test('Inter is not preloaded', () => assert.ok(!/rel="preload"[^>]*woff2/.test(home)));
 
-test('no executable scripts', () => {
-  assert.equal([...home.matchAll(/<script(?![^>]*application\/ld\+json)/g)].length, 0);
+test('the theme scripts are the only executable scripts', () => {
+  const scripts = [...home.matchAll(/<script(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)];
+  assert.equal(scripts.length, 2);
+  for (const [script] of scripts) assert.match(script, /theme/);
 });
 
 test('logo keeps the supplied geometry', () => {

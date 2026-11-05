@@ -79,7 +79,8 @@ async function run(label, type, launch = {}) {
   }
 
   for (const scheme of ['light', 'dark']) {
-    const ctx = await browser.newContext({ colorScheme: scheme });
+    const ctx = await browser.newContext();
+    if (scheme === 'dark') await ctx.addInitScript(() => localStorage.setItem('theme', 'dark'));
     const page = await ctx.newPage();
     const problems = [];
     page.on('console', (m) => m.type() === 'error' && problems.push(m.text()));
@@ -124,7 +125,7 @@ async function run(label, type, launch = {}) {
   check(label, '320px notes link is visible when notes exist', notesLink);
   const lines = await page.evaluate(() => {
     const oneLine = (el) => el.getBoundingClientRect().height < parseFloat(getComputedStyle(el).fontSize) * 1.7;
-    return { name: oneLine(document.querySelector('h1')), emails: [...document.querySelectorAll('#contact dd')].every(oneLine) };
+    return { name: oneLine(document.querySelector('h1')), emails: [...document.querySelectorAll('.contact-handle')].every(oneLine) };
   });
   check(label, '320px name stays on one line', lines.name);
   check(label, '320px emails do not break mid-address', lines.emails);
@@ -187,6 +188,37 @@ async function run(label, type, launch = {}) {
   const darkCtx = await browser.newContext({ colorScheme: 'dark', viewport: { width: 1440, height: 900 } });
   const dp = await darkCtx.newPage();
   await dp.goto(base, { waitUntil: 'networkidle' });
+  const bodyBg = () => getComputedStyle(document.body).backgroundColor;
+  const firstVisit = await dp.evaluate(bodyBg);
+  check(label, 'a first visit on a dark system is light', firstVisit === 'rgb(255, 255, 255)', firstVisit);
+
+  const toggle = dp.locator('[data-theme-choice="dark"]');
+  const lightChoice = dp.locator('[data-theme-choice="light"]');
+  check(label, 'toggle starts unpressed', (await toggle.getAttribute('aria-pressed')) === 'false');
+  await toggle.scrollIntoViewIfNeeded();
+  const target = await toggle.evaluate((el) => {
+    const box = el.getBoundingClientRect();
+    const hits = (dy) => el.contains(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2 + dy));
+    return { width: box.width, tall: hits(-21) && hits(21) };
+  });
+  check(label, 'toggle target is at least 44px', target.width >= 44 && target.tall, JSON.stringify(target));
+  await toggle.click();
+  await dp.waitForFunction(() => getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)');
+  check(label, 'toggle shows it is pressed', (await toggle.getAttribute('aria-pressed')) === 'true');
+  await dp.reload({ waitUntil: 'networkidle' });
+  const restored = await dp.evaluate(bodyBg);
+  check(label, 'dark theme survives a reload', restored === 'rgb(0, 0, 0)', restored);
+  check(label, 'toggle stays pressed after a reload', (await toggle.getAttribute('aria-pressed')) === 'true');
+
+  await lightChoice.focus();
+  await dp.keyboard.press('Enter');
+  await dp.waitForFunction(() => getComputedStyle(document.body).backgroundColor === 'rgb(255, 255, 255)');
+  await dp.reload({ waitUntil: 'networkidle' });
+  const backToLight = await dp.evaluate(bodyBg);
+  check(label, 'keyboard switches back to light and it is saved', backToLight === 'rgb(255, 255, 255)', backToLight);
+  await toggle.click();
+  await dp.waitForFunction(() => getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)');
+
   const dark = await dp.evaluate(() => ({
     bg: getComputedStyle(document.body).backgroundColor,
     filter: getComputedStyle(document.querySelector('.portrait')).filter,
@@ -194,6 +226,12 @@ async function run(label, type, launch = {}) {
   check(label, 'dark page background is black', dark.bg === 'rgb(0, 0, 0)', dark.bg);
   check(label, 'dark portrait is dimmed', dark.filter.includes('brightness'), dark.filter);
   await darkCtx.close();
+
+  const noScript = await browser.newContext({ javaScriptEnabled: false });
+  const np = await noScript.newPage();
+  await np.goto(base);
+  check(label, 'toggle is hidden without scripts', !(await np.locator('.theme-toggle').isVisible()));
+  await noScript.close();
 
   await browser.close();
 }

@@ -5,8 +5,14 @@ import { between, buildFixture, FIXTURE_OUT } from './helpers.mjs';
 
 let ext = '';
 
+const scholarUrl = 'https://scholar.google.com/citations?user=fixture';
+
 before(() => {
   const r = buildFixture({
+    'profile.yaml': readFileSync('src/content/profile.yaml', 'utf8').replace(
+      /- label: Google Scholar\r?\n/,
+      `- label: Google Scholar\n      handle: Fixture Scholar\n      url: ${scholarUrl}\n`,
+    ),
     'publications.yaml': '- id: fixture-paper\n  period: "2028"\n  start: "2028"\n  title: Fixture Paper\n  authors: [Tae-Yoon Kim]\n  venue: Fixture Venue\n',
     'projects.yaml': '- id: fixture-project\n  period: "2028"\n  start: "2028"\n  title: Fixture Project\n  summary: Fixture summary\n',
     'notes/fixture-note.md': '---\ntitle: Fixture Note\ndate: 2028-01-02\nsummary: Fixture note summary\n---\n\nFixture note body.\n',
@@ -17,6 +23,12 @@ before(() => {
 });
 
 after(() => rmSync(FIXTURE_OUT, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }));
+
+test('adding a Google Scholar address turns its card into a link', () => {
+  const card = ext.match(new RegExp(`<a\\b[^>]*href="${scholarUrl.replace(/[?.]/g, '\\$&')}"[^>]*>[\\s\\S]*?</a>`))?.[0] ?? '';
+  assert.match(card, /<svg[^>]*aria-hidden="true"[^>]*>\s*<path/);
+  assert.ok(card.includes('Fixture Scholar'));
+});
 
 test('added content appears everywhere it should', () => {
   assert.match(ext, /<h2[^>]*>Publications/);

@@ -26,7 +26,7 @@ const person = {
   image: new URL(personImage.src, Astro.site).href,
   email: profile.emails.map((email) => email.address),
   affiliation: { '@type': 'Organization', name: profile.institution },
-  sameAs: profile.links.map((link) => link.url),
+  sameAs: profile.links.flatMap((link) => link.url ?? []),
 };
 ---
 
@@ -51,6 +51,16 @@ const person = {
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script is:inline>
+      // Runs before the first paint so a saved dark theme never flashes light.
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem('theme');
+        } catch {}
+        document.documentElement.dataset.theme = saved === 'dark' ? 'dark' : 'light';
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
