@@ -1,0 +1,43 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import SpecBlock from '../../components/SpecBlock.astro';
+import SpecRow from '../../components/SpecRow.astro';
+import Base from '../../layouts/Base.astro';
+import { isPublished } from '../../lib/notes';
+
+export async function getStaticPaths() {
+  const published = (await getCollection('notes')).filter(isPublished);
+  return published.length > 0 ? [{ params: { index: undefined } }] : [];
+}
+
+const profile = (await getEntry('profile', 'main'))!.data;
+const notes = (await getCollection('notes'))
+  .filter(isPublished)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Base title={`Notes | ${profile.name}`} description={`Notes by ${profile.name}.`}>
+  <div class="container list">
+    <SpecBlock id="notes" title="Notes">
+      {
+        notes.map((note) => (
+          <SpecRow label={note.data.date.toISOString().slice(0, 10)}>
+            <a href={`/notes/${note.id}/`}>{note.data.title}</a>
+            <span class="muted">{note.data.summary}</span>
+          </SpecRow>
+        ))
+      }
+    </SpecBlock>
+  </div>
+</Base>
+
+<style>
+  .list {
+    padding-block: clamp(48px, 6vw, 72px);
+  }
+
+  .muted {
+    display: block;
+    color: var(--muted);
+  }
+</style>

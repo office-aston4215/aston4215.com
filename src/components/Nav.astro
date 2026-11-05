@@ -1,12 +1,13 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
+import { isPublished } from '../lib/notes';
 import Mark from './Mark.astro';
 
 const profile = (await getEntry('profile', 'main'))!.data;
 const github = profile.links.find((link) => link.label === 'GitHub');
 const hasPublications = (await getCollection('publications')).length > 0;
 const hasProjects = (await getCollection('projects')).length > 0;
-const hasNotes = (await getCollection('notes')).length > 0;
+const hasNotes = (await getCollection('notes')).some(isPublished);
 
 const items = [
   { label: 'Research', href: '/#research' },

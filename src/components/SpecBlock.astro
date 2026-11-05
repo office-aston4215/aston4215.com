@@ -1,0 +1,49 @@
+---
+interface Props {
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+---
+
+<section class="block" id={id}>
+  <h2>{title}</h2>
+  <dl>
+    <slot />
+  </dl>
+</section>
+
+<style>
+  .block {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 16px;
+    padding-block: 28px 40px;
+    border-top: 1px solid var(--line);
+  }
+
+  h2 {
+    grid-column: 1 / 5;
+    font-size: 28px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  dl {
+    grid-column: 5 / 13;
+    min-width: 0;
+  }
+
+  @media (max-width: 767px) {
+    h2,
+    dl {
+      grid-column: 1 / -1;
+    }
+
+    h2 {
+      margin-bottom: 12px;
+    }
+  }
+</style>

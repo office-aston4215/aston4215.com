@@ -1,0 +1,87 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { isPublished } from '../../lib/notes';
+
+export async function getStaticPaths() {
+  const notes = (await getCollection('notes')).filter(isPublished);
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}
+
+const { note } = Astro.props;
+const profile = (await getEntry('profile', 'main'))!.data;
+const { Content } = await render(note);
+---
+
+<Base title={`${note.data.title} | ${profile.name}`} description={note.data.summary}>
+  <article class="container note">
+    <time datetime={note.data.date.toISOString()}>{note.data.date.toISOString().slice(0, 10)}</time>
+    <h1>{note.data.title}</h1>
+    <div class="body">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .note {
+    padding-block: clamp(48px, 6vw, 72px) clamp(56px, 7vw, 96px);
+  }
+
+  time {
+    color: var(--muted);
+    font: 400 14px/1.75 var(--mono);
+    letter-spacing: 0;
+  }
+
+  h1 {
+    margin-top: 8px;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.028em;
+    font-weight: 600;
+  }
+
+  .body {
+    max-width: 65ch;
+    margin-top: 32px;
+  }
+
+  .body :global(p),
+  .body :global(ul),
+  .body :global(ol),
+  .body :global(pre) {
+    margin-block: 1em 0;
+  }
+
+  .body :global(h2) {
+    margin-top: 1.6em;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  .body :global(a) {
+    text-decoration: underline;
+  }
+
+  .body :global(code),
+  .body :global(pre) {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    letter-spacing: 0;
+  }
+
+  .body :global(pre) {
+    overflow-x: auto;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--band);
+  }
+
+  .body :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

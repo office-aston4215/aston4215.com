@@ -1,0 +1,40 @@
+---
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="row">
+  <dt>{label}</dt>
+  <dd><slot /></dd>
+</div>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    column-gap: 16px;
+    padding-block: 9px;
+  }
+
+  dt {
+    color: var(--muted);
+    font: 400 14px/1.75 var(--mono);
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 767px) {
+    .row {
+      grid-template-columns: 118px minmax(0, 1fr);
+      font-size: 15px;
+    }
+  }
+</style>

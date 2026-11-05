@@ -1,11 +1,18 @@
 ---
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import Hero from '../components/Hero.astro';
 import KvGraphic from '../components/KvGraphic.astro';
+import SpecBlock from '../components/SpecBlock.astro';
+import SpecRow from '../components/SpecRow.astro';
 import Tile from '../components/Tile.astro';
 import Base from '../layouts/Base.astro';
 
 const profile = (await getEntry('profile', 'main'))!.data;
+
+const newestFirst = (a: { data: { start: number } }, b: { data: { start: number } }) => b.data.start - a.data.start;
+const education = (await getCollection('education')).sort(newestFirst);
+const publications = (await getCollection('publications')).sort(newestFirst);
+const projects = (await getCollection('projects')).sort(newestFirst);
 ---
 
 <Base title={profile.name} description={profile.lead}>
@@ -25,6 +32,53 @@ const profile = (await getEntry('profile', 'main'))!.data;
       </Tile>
     </div>
   </section>
+
+  <div class="container specs">
+    {
+      publications.length > 0 && (
+        <SpecBlock id="publications" title="Publications">
+          {publications.map(({ data }) => (
+            <SpecRow label={data.period}>
+              {data.url ? <a href={data.url}>{data.title}</a> : data.title}
+              <span class="muted">{data.authors.join(', ')}</span>
+              <span class="muted">{data.venue}</span>
+            </SpecRow>
+          ))}
+        </SpecBlock>
+      )
+    }
+    {
+      projects.length > 0 && (
+        <SpecBlock id="projects" title="Projects">
+          {projects.map(({ data }) => (
+            <SpecRow label={data.period}>
+              {data.url ? <a href={data.url}>{data.title}</a> : data.title}
+              <span class="muted">{data.summary}</span>
+            </SpecRow>
+          ))}
+        </SpecBlock>
+      )
+    }
+    <SpecBlock id="education" title="Education">
+      {education.map(({ data }) => <SpecRow label={data.period}>{data.title}</SpecRow>)}
+    </SpecBlock>
+    <SpecBlock id="contact" title="Contact">
+      {
+        profile.emails.map((email) => (
+          <SpecRow label={email.label}>
+            <a href={`mailto:${email.address}`}>{email.address}</a>
+          </SpecRow>
+        ))
+      }
+      {
+        profile.links.map((link) => (
+          <SpecRow label={link.label}>
+            <a href={link.url}>{link.handle}</a>
+          </SpecRow>
+        ))
+      }
+    </SpecBlock>
+  </div>
 </Base>
 
 <style>
@@ -53,5 +107,9 @@ const profile = (await getEntry('profile', 'main'))!.data;
     display: inline-block;
     margin-top: 10px;
     font-weight: 500;
+  }
+
+  .specs {
+    padding-block: clamp(56px, 7vw, 96px) clamp(24px, 4vw, 48px);
   }
 </style>
