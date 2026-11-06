@@ -1,0 +1,98 @@
+---
+import { readFileSync } from 'node:fs';
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+
+// The pages are images rendered from the PDF, so every browser shows the same sheets; tests check their count against the PDF.
+const PDF = '/Tae-Yoon-Kim-CV.pdf';
+const profile = (await getEntry('profile', 'main'))!.data;
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/cv/page-*.png', { eager: true });
+const pages = Object.entries(files)
+  .sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true }))
+  .map(([, file]) => file.default);
+
+const created = readFileSync(`public${PDF}`, 'latin1').match(/\/CreationDate\s*\(D:(\d{4})(\d{2})/);
+const updated = created && new Date(Date.UTC(+created[1], +created[2] - 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const meta = [updated && `Updated ${updated}`, `PDF, ${pages.length} pages`].filter(Boolean).join(' · ');
+---
+
+<Base title={`Curriculum Vitae | ${profile.name}`} description={`Curriculum vitae of ${profile.name}.`}>
+  <section class="cv">
+    <div class="container">
+      <div class="top">
+        <div>
+          <h1>Curriculum Vitae</h1>
+          <p class="meta">{meta}</p>
+        </div>
+        <a class="button" href={PDF} download>Download PDF</a>
+      </div>
+      <div class="pages">
+        {
+          pages.map((page, i) => (
+            <Image
+              src={page}
+              widths={[430, 860, 1720]}
+              sizes="(min-width: 960px) 860px, 92vw"
+              alt={`Curriculum Vitae, page ${i + 1} of ${pages.length}`}
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .cv {
+    padding-block: clamp(40px, 5vw, 64px) clamp(56px, 7vw, 96px);
+    background: var(--band);
+  }
+
+  .top,
+  .pages {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px 24px;
+    margin-bottom: clamp(24px, 3vw, 32px);
+  }
+
+  h1 {
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    font-weight: 600;
+  }
+
+  .meta {
+    margin-top: 6px;
+    color: var(--muted);
+    font: 400 14px/1.75 var(--mono);
+    letter-spacing: 0;
+  }
+
+  .pages {
+    display: grid;
+    gap: 16px;
+  }
+
+  .pages :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+  }
+
+  :global([data-theme='dark']) .pages :global(img) {
+    filter: brightness(0.92);
+  }
+</style>

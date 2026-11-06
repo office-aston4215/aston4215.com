@@ -34,7 +34,7 @@ jobs:
       - name: Check in browsers
         env:
           SKIP_BROWSERS: edge
-          PAGES: /,/404.html
+          PAGES: /,/404.html,/cv/
         run: |
           npx astro preview --port 4321 --host 127.0.0.1 &
           curl --silent --fail --retry 30 --retry-connrefused --retry-delay 1 --output /dev/null http://127.0.0.1:4321/

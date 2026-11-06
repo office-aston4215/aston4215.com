@@ -1,12 +1,16 @@
-- id: technical
+- id: programming
   order: 1
-  label: Technical
-  value: C, Python, Java, JavaScript, PHP, MySQL, ROS, Docker
-- id: language
+  label: Programming
+  value: C, Python, Java, JavaScript, PHP, MySQL
+- id: tools
   order: 2
-  label: Language
-  value: Korean (Native), English (TOEIC 880, DET 115)
-- id: research-interests
+  label: Tools
+  value: ROS, Gazebo, Docker
+- id: languages
   order: 3
-  label: Research Interests
-  value: Efficient LLM Inference, AI Security, Defense Robotics, Cyber-Physical Systems
+  label: Languages
+  value: Korean (native), English (TOEIC 880, DET 115)
+- id: interests
+  order: 4
+  label: Interests
+  value: Artificial Intelligence, Large Language Models, Cyber-Physical Systems, Defense Science, Security Systems

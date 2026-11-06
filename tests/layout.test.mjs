@@ -8,7 +8,7 @@ const notFound = readDist('404.html');
 
 test('nav lists only existing sections', () => {
   const nav = between(home, '<nav', '</nav>');
-  for (const href of ['/#research', '/#labs', '/#education', '/#experience', '/#honors', '/#contact', 'https://github.com/office-aston4215', 'mailto:aston4215@kaist.ac.kr'])
+  for (const href of ['/#research', '/#labs', '/#education', '/#teaching', '/#honors', '/#contact', 'https://github.com/office-aston4215', 'mailto:aston4215@kaist.ac.kr'])
     assert.ok(nav.includes(href), href);
   for (const label of ['Publications', 'Projects', 'Notes'])
     assert.ok(!nav.includes(label), label);
@@ -53,7 +53,7 @@ test('logo keeps the supplied geometry', () => {
 
 test('footer shows copyright and domain', () => {
   const footer = between(home, '<footer', '</footer>');
-  assert.match(footer, /Copyright © \d{4} Tae-Yoon Kim/);
+  assert.match(footer, /Copyright © \d{4} Tae-Yoon Kim All Rights Reserved\./);
   assert.ok(footer.includes('aston4215.com'));
 });
 

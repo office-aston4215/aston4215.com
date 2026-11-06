@@ -9,9 +9,8 @@
   period: September 2026 – Present
   start: "2026-09"
   details:
-    - Studied frontier LLM architectures (Kimi K3, GLM-5.3-Flash) and FlashAttention versions 1 through 4, focusing on KV cache design, sparse attention, and Mixture-of-Experts routing.
-    - Proposed a combined KV cache and sparse indexer component, then disproved its feasibility through case-by-case analysis and small-scale experiments.
-    - Developing Gramian SVD Checkpoint Compaction, a low-rank state compression method for prefix caching in linear attention models, with GPU experiments toward a paper submission.
+    - Developing Gramian SVD Checkpoint Compaction, a low-rank state compression method for prefix caching in linear-attention models, with GPU experiments toward a paper submission.
+    - Learned modern LLM inference design by studying frontier architectures and FlashAttention, covering KV caching, sparse attention and MoE routing; tested a self-proposed KV cache–sparse indexer design and ruled it out through analysis and small-scale experiments.
 - id: urban-robotics-lab
   title: Urban Robotics Lab
   course: Individual Study (EE.91100)
@@ -23,5 +22,5 @@
   period: June 2026 – August 2026
   start: "2026-06"
   details:
-    - Ran LiDAR SLAM (GMapping, Hector) and navigation on a simulated TurtleBot3 in Gazebo, building ROS nodes in Docker and visualizing LiDAR, IMU, and RGB-D streams in RViz.
-    - Benchmarked seven keypoint pipelines from ORB and SIFT to the learned SuperPoint on inlier ratio and runtime, finding DAISY most accurate (29.5% inlier ratio).
+    - "Learned the ROS development workflow: building nodes in Docker, simulating a TurtleBot3 in Gazebo, and visualizing LiDAR, IMU and RGB-D streams in RViz."
+    - Gained hands-on experience with LiDAR SLAM (GMapping, Hector) and autonomous navigation, and with classical vs. learned feature matching by benchmarking seven keypoint pipelines from ORB and SIFT to SuperPoint.

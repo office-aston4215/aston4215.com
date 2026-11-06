@@ -1,16 +1,10 @@
 - id: club-association
-  title: Student Council of Seongdeok High School
-  subtitle: President of Club Association
-  location: Gwangju, Korea
+  title: President, Club Association
+  subtitle: Student Council, Gwangju Seongdeok High School
   period: March 2023 – February 2024
   start: "2023-03"
-  details:
-    - Supervised student club affairs and contributed to school-wide events and policy discussions by representing club organizations within the student council structure.
 - id: system-programming-committee
-  title: Club Association of Seongdeok High School
-  subtitle: President of Student System Programming Committee
-  location: Gwangju, Korea
+  title: President, Student System Programming Committee
+  subtitle: Club Association, Gwangju Seongdeok High School
   period: March 2023 – February 2024
   start: "2023-03"
-  details:
-    - Organized and supervised a student technology committee responsible for supporting school system operations, troubleshooting technical issues, and improving digital workflows.

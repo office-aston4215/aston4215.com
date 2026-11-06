@@ -6,23 +6,16 @@
   start: "2027-01"
 - id: kaist
   title: Korea Advanced Institute of Science and Technology (KAIST)
-  subtitle: Undergraduate Program, School of Computing
+  subtitle: B.S. in Computer Science, School of Computing
   location: Daejeon, Korea
-  period: 2025 – Present
+  period: Expected February 2029
   start: "2025"
   details:
     - "GPA: 4.11 / 4.3"
-    - "Expected graduation: February 2029"
-    - "Coursework: Machine Learning, Introduction to Artificial Intelligence, Computer Organization, System Programming, Data Structure, Discrete Mathematics"
-- id: saint-francis
-  title: Saint Francis Catholic Secondary School
-  subtitle: Study abroad coursework in General Studies
-  location: Ontario, Canada
-  period: January 2023
-  start: "2023-01"
+    - "Coursework: Machine Learning, Introduction to Artificial Intelligence, Computer Organization, System Programming, Data Structures"
 - id: seongdeok
   title: Gwangju Seongdeok High School
-  subtitle: High School Diploma
+  subtitle: High School Diploma; study abroad at St. Francis Catholic Secondary School, Ontario, Canada (January 2023)
   location: Gwangju, Korea
-  period: 2022 – January 2025
+  period: Graduated January 2025
   start: "2022"

@@ -142,3 +142,19 @@ dd {
 .skip-link:focus {
   transform: none;
 }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 980px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  white-space: nowrap;
+}
+
+.button:hover {
+  text-decoration: none;
+  opacity: 0.86;
+}

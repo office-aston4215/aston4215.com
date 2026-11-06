@@ -13,7 +13,7 @@ function assertIncludes(html, values) {
 }
 
 test('sections follow the CV order', () => {
-  const ids = ['research', 'labs', 'education', 'honors', 'experience', 'leadership', 'skills', 'contact'];
+  const ids = ['research', 'labs', 'education', 'honors', 'teaching', 'leadership', 'skills', 'contact'];
   const positions = ids.map((id) => home.indexOf(`id="${id}"`));
   assert.ok(positions.every((p) => p >= 0), positions.join());
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);
@@ -33,10 +33,12 @@ test('labs section has a card for each lab, newest first', () => {
     'Advisor: Prof. Hyun Myung',
     'September 2026 – Present',
     'June 2026 – August 2026',
-    'Studied frontier LLM architectures (Kimi K3, GLM-5.3-Flash) and FlashAttention versions 1 through 4',
-    'Developing Gramian SVD Checkpoint Compaction',
-    'finding DAISY most accurate (29.5% inlier ratio)',
+    'Developing Gramian SVD Checkpoint Compaction, a low-rank state compression method for prefix caching in linear-attention models, with GPU experiments toward a paper submission.',
+    'Learned modern LLM inference design by studying frontier architectures and FlashAttention, covering KV caching, sparse attention and MoE routing; tested a self-proposed KV cache–sparse indexer design and ruled it out through analysis and small-scale experiments.',
+    'Learned the ROS development workflow: building nodes in Docker, simulating a TurtleBot3 in Gazebo, and visualizing LiDAR, IMU and RGB-D streams in RViz.',
+    'Gained hands-on experience with LiDAR SLAM (GMapping, Hector) and autonomous navigation, and with classical vs. learned feature matching by benchmarking seven keypoint pipelines from ORB and SIFT to SuperPoint.',
   ]);
+  assert.ok(!plain(section).includes('DAISY'), 'old lab details are still shown');
 });
 
 test('each lab card shows the lab logo and links to its site', () => {
@@ -58,7 +60,6 @@ test('education uses schools as subheadings, newest first', () => {
   assert.deepEqual(subheadings(sectionById(home, 'education')), [
     'University of California, Berkeley',
     'Korea Advanced Institute of Science and Technology (KAIST)',
-    'Saint Francis Catholic Secondary School',
     'Gwangju Seongdeok High School',
   ]);
 });
@@ -68,52 +69,57 @@ test('education entries show CV details', () => {
   assertIncludes(section, [
     'Exchange Student, UCEAP Reciprocity Program',
     'January 2027 – May 2027',
-    'Undergraduate Program, School of Computing',
+    'B.S. in Computer Science, School of Computing',
+    'Expected February 2029',
     'GPA: 4.11 / 4.3',
-    'Expected graduation: February 2029',
-    'Machine Learning, Introduction to Artificial Intelligence, Computer Organization, System Programming, Data Structure, Discrete Mathematics',
-    'Ontario, Canada',
-    'Study abroad coursework in General Studies',
-    'High School Diploma',
-    '2022 – January 2025',
+    'Coursework: Machine Learning, Introduction to Artificial Intelligence, Computer Organization, System Programming, Data Structures',
+    'High School Diploma; study abroad at St. Francis Catholic Secondary School, Ontario, Canada (January 2023)',
+    'Graduated January 2025',
   ]);
+  assert.ok(!plain(section).includes('Discrete Mathematics'), 'coursework does not match the CV');
   assert.ok(!section.includes('<dt'));
 });
 
 test('honors are listed newest first', () => {
   const text = plain(sectionById(home, 'honors'));
-  const order = ['Freshman Oblige Project Dean', 'Color Your 2025 Project Dean', 'School of Freshman Dean', 'Highest Honor for Academic Excellence', 'Meritorious Service Award'];
+  const order = ['Freshman Oblige Project Dean', 'Color Your 2025 Project Dean', "Dean's List, School of Freshman", 'Highest Honor for Academic Excellence', 'Meritorious Service Award'];
   const positions = order.map((award) => text.indexOf(award));
   assert.ok(positions.every((p) => p >= 0), positions.join());
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);
 });
 
-test('experience and leadership show roles and details', () => {
-  assertIncludes(sectionById(home, 'experience'), [
-    'Global Institute For Talented EDucation',
-    'JuniorKAIST Teaching Tutor',
-    'KAIST CS.10001 Introduction to Programming',
-    'Undergraduate Teaching Assistant',
-    'Supported Python instruction for first-year students through teaching materials and Q&A.',
+test('teaching and leadership follow the CV', () => {
+  const teaching = sectionById(home, 'teaching');
+  assert.match(teaching, /<h2[^>]*>Teaching<\/h2>/);
+  assert.deepEqual(subheadings(teaching), ['JuniorKAIST Teaching Tutor', 'Undergraduate Teaching Assistant']);
+  assertIncludes(teaching, [
+    'Global Institute For Talented EDucation (GIFTED), KAIST',
+    'Lead C programming sessions and review students\' assignments.',
+    'Introduction to Programming (CS.10001), KAIST',
+    'Support Python instruction for first-year students through Q&A.',
   ]);
-  assertIncludes(sectionById(home, 'leadership'), [
-    'President of Club Association',
-    'President of Student System Programming Committee',
+  const leadership = sectionById(home, 'leadership');
+  assert.deepEqual(subheadings(leadership), ['President, Club Association', 'President, Student System Programming Committee']);
+  assertIncludes(leadership, [
+    'Student Council, Gwangju Seongdeok High School',
+    'Club Association, Gwangju Seongdeok High School',
     'March 2023 – February 2024',
   ]);
+  assert.ok(!leadership.includes('<li'), 'the CV lists no leadership details');
 });
 
-test('skills show technical, language and research interests', () => {
+test('skills and interests follow the CV', () => {
   assertIncludes(sectionById(home, 'skills'), [
-    'C, Python, Java, JavaScript, PHP, MySQL, ROS, Docker',
-    'Korean (Native), English (TOEIC 880, DET 115)',
-    'Efficient LLM Inference, AI Security, Defense Robotics, Cyber-Physical Systems',
+    'C, Python, Java, JavaScript, PHP, MySQL',
+    'ROS, Gazebo, Docker',
+    'Korean (native), English (TOEIC 880, DET 115)',
+    'Artificial Intelligence, Large Language Models, Cyber-Physical Systems, Defense Science, Security Systems',
   ]);
 });
 
 test('skills keep the CV order', () => {
   const labels = [...sectionById(home, 'skills').matchAll(/<dt[^>]*>([^<]*)<\/dt>/g)].map((m) => m[1]);
-  assert.deepEqual(labels, ['Technical', 'Language', 'Research Interests']);
+  assert.deepEqual(labels, ['Programming', 'Tools', 'Languages', 'Interests']);
 });
 
 test('phone number and street address stay off the site', () => {

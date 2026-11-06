@@ -11,8 +11,8 @@ test('one h1 with the name', () => {
 test('lead shows the two requested lines in order', () => {
   const lead = between(home, '<p class="lead"', '</p>');
   const lines = [...lead.matchAll(/<span[^>]*>([^<]*)<\/span>/g)].map((m) => m[1].replaceAll('&amp;', '&'));
-  assert.deepEqual(lines, ['Korea Advanced Institute of Science and Technology Undergraduate', 'AI & Software Researcher']);
-  assert.ok(stripTags(lead).includes('Undergraduate AI'), 'lines must stay separate words for screen readers and search');
+  assert.deepEqual(lines, ['Korea Advanced Institute of Science and Technology', 'AI & Software Researcher']);
+  assert.ok(stripTags(lead).includes('Technology AI'), 'lines must stay separate words for screen readers and search');
 });
 
 test('portrait is optimized and described', () => {

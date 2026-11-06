@@ -46,3 +46,7 @@ test('every branch is checked but only main deploys', () => {
   assert.match(deployJob, /if: github\.ref == 'refs\/heads\/main'/);
   assert.match(beforeDeploy, /if: github\.ref == 'refs\/heads\/main'\s*\n\s+uses: actions\/upload-pages-artifact/);
 });
+
+test('browsers check the CV page too', () => {
+  assert.match(beforeDeploy, /PAGES: .*\/cv\//);
+});
